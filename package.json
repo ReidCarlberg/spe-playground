@@ -6,11 +6,15 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@azure/msal-node": "^2.6.6",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^16.4.5",
     "express": "~4.16.1",
+    "express-session": "^1.18.0",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "node-fetch": "^3.3.2"
   }
 }

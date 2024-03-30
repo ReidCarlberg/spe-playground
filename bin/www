@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+console.log("hello 0");
+
 /**
  * Module dependencies.
  */
@@ -7,6 +9,8 @@
 var app = require('../app');
 var debug = require('debug')('spe-playground:server');
 var http = require('http');
+
+console.log("hello 1");
 
 /**
  * Get port from environment and store in Express.
