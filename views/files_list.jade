@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  h1 Files and Folders List
+  if items && items.length > 0
+    table(border="1")
+      thead
+        tr
+          th Name
+          th Type
+          th Created By
+          th Created Date Time
+          th Actions 
+      tbody
+        each item in items
+          tr
+            td
+              if item['@microsoft.graph.downloadUrl']
+                a(href=item['@microsoft.graph.downloadUrl'])= item.name
+              else if item.folder
+                a(href='/list/' + item.parentReference.driveId + '/' + item.id)= item.name
+              else
+                | #{item.name}
+            td= item['@microsoft.graph.downloadUrl'] ? 'File' : 'Folder'
+            td= item.createdBy.user.displayName
+            td= item.createdDateTime
+            td(blank)  
+  else
+    p No items found.

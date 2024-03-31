@@ -1,0 +1,28 @@
+extends layout 
+
+block content 
+    h1 Containers
+    if value.length
+      table(border="1")
+        thead
+          tr
+            th Display Name
+            th Container Type ID
+            th Created
+            th Storage Used
+            th Ownership Type
+        tbody
+          each container in value
+            tr
+              td
+                a(href=`/files/list/${container.id}`)= container.displayName
+              td= container.containerTypeId
+              td= container.createdDateTime
+
+              td= container.storageUsedInBytes
+              td= container.ownershipType
+    else
+      p No containers found.
+
+    p 
+        a(href=`/containers/create`)= 'Create Container'

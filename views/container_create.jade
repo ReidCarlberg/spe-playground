@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1 Add New Container
+  form(method="POST", action="/containers/create")
+    .form-group
+      label(for="displayName") Display Name
+      input#displayName(type="text", name="displayName", required=true)
+    .form-group
+      label(for="description") Description
+      textarea#description(name="description", required=true)
+    button(type="submit") Submit
