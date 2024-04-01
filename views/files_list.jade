@@ -35,6 +35,8 @@ block content
                   a(href=`/files/preview/${item.id}`, target="_blank" class="btn btn-primary") Preview
                 else if item['@microsoft.graph.downloadUrl']
                   a(href=`/files/preview/${item.id}`, target="_blank" class="btn btn-primary") Preview
+                | &nbsp;
+                a(href=`/files/perms/${item.id}`, class="btn btn-primary") Perms
     else
       .alert.alert-info.mb-3 No items found.
       p.mb-3

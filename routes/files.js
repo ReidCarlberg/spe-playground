@@ -123,4 +123,19 @@ router.get('/delete/:itemId', async (req, res) => {
     }
 });
 
+// /files/perms route
+router.get('/perms/:fileId', async (req, res) => {
+    const { fileId } = req.params;
+    const driveId = req.session.driveId;
+    const url = `https://graph.microsoft.com/v1.0/drives/${driveId}/items/${fileId}/permissions`;
+
+    try {
+        const permissions = await apiFetch(req, url);
+        res.json(permissions);
+    } catch (error) {
+        console.error('Error fetching permissions:', error);
+        res.status(500).send('Error fetching permissions');
+    }
+});
+
 module.exports = router;
