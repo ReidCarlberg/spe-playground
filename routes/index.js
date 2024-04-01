@@ -24,22 +24,14 @@ const msalConfig = {
 
 const cca = new msal.ConfidentialClientApplication(msalConfig);
 
-/* GET home page. */
-/*
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-*/
-
 // Home route
 router.get('/', (req, res) => {
   console.log("hello 3");
   console.log(req.session);
   if (req.session.isAuthenticated) {
-    res.send(`Welcome ${req.session.user}!</br><a href="/containers">Containers</a>`);
+    res.render('/containers/');
   } else {
     res.render('index', { title: 'SPE Playground' } );
-    //res.send('Please <a href="/signin">sign in</a>');
   }
 });
 
