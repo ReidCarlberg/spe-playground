@@ -1,6 +1,8 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  p Please <a href="/signin">sign in</a>
+  .container.mt-4
+    h1.mb-4= title
+    p.mb-2 Welcome to #{title}
+    p.mb-2 
+      a(href=`/signin` class="btn btn-success") Sign In

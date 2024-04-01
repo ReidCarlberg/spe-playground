@@ -2,7 +2,7 @@ extends layout
 
 block content
   .container.mt-4
-    h1.mb-4 Files and Folders List
+    h1 Files and Folders List
     if items && items.length > 0
       table.table.table-bordered
         thead.thead-dark
@@ -36,8 +36,14 @@ block content
                 else if item['@microsoft.graph.downloadUrl']
                   a(href=`/files/preview/${item.id}`, target="_blank" class="btn btn-primary") Preview
                 | &nbsp;
-                a(href=`/files/perms/${item.id}`, class="btn btn-primary") Perms
+                a(href=`/files/perms/${item.id}` class="btn btn-info") Perms
     else
       .alert.alert-info.mb-3 No items found.
-      p.mb-3
-        a(href=`/files/upload` class="btn btn-success") Upload
+
+  p.mb-3
+    a(href=`/files/upload` class="btn btn-success") Upload
+
+
+  // Display raw JSON for item
+  h2 Raw JSON Files and Folders List
+  pre= JSON.stringify(items, null, 2)

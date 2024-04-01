@@ -25,3 +25,7 @@ block content
       .alert.alert-info.mb-3 No containers found.
     p.mb-3
       a(href=`/containers/create` class="btn btn-primary") Create Container
+
+  // Display raw JSON for item
+  h2 Raw JSON Files and Folders List
+  pre= JSON.stringify(value, null, 2)

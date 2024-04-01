@@ -1,9 +1,10 @@
 extends layout
 
 block content
-    h1 File Upload
+  .container.mt-4
+    h1.mb-4 File Upload
     form(action="/files/upload-file", method="post", enctype="multipart/form-data")
       .form-group
         label(for="file") Choose file to upload
-        input(type="file", name="file", id="file")
-      button(type="submit") Upload File
+        input.form-control(type="file", name="file", id="file")
+      button.btn.btn-primary(type="submit") Upload File

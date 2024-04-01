@@ -72,4 +72,18 @@ router.get('/redirect', (req, res) => {
 
 });
 
+// Route to handle signout
+router.get('/signout', async (req, res) => {
+  try {
+    // Clear the token cache to sign the user out
+    req.session.accessToken=null;
+    req.session.isAuthenticated=null;
+    req.session.username=null;
+    res.redirect('/'); // Redirect to home page or sign-in page
+  } catch (error) {
+    console.error('Error signing out:', error);
+    res.status(500).send('Error signing out');
+  }
+});
+
 module.exports = router;
