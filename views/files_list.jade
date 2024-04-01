@@ -1,32 +1,41 @@
 extends layout
 
 block content
-  h1 Files and Folders List
-  if items && items.length > 0
-    table(border="1")
-      thead
-        tr
-          th Name
-          th Type
-          th Created By
-          th Created Date Time
-          th Actions 
-      tbody
-        each item in items
+  .container.mt-4
+    h1.mb-4 Files and Folders List
+    if items && items.length > 0
+      table.table.table-bordered
+        thead.thead-dark
           tr
-            td
-              if item['@microsoft.graph.downloadUrl']
-                a(href=item['@microsoft.graph.downloadUrl'])= item.name
-              else if item.folder
-                a(href='/files/list/' + item.parentReference.driveId + '/' + item.id)= item.name
-              else
-                | #{item.name}
-            td= item['@microsoft.graph.downloadUrl'] ? 'File' : 'Folder'
-            td= item.createdBy.user.displayName
-            td= item.createdDateTime
-            td(blank)  
-  else
-    p No items found.
-
-  p 
-    a(href=`/files/upload`)= 'Upload'
+            th Name
+            th Type
+            th Created By
+            th Created Date Time
+            th Actions 
+        tbody
+          each item in items
+            tr
+              td
+                if item['@microsoft.graph.downloadUrl']
+                  a(href=item['@microsoft.graph.downloadUrl'])= item.name
+                else if item.folder
+                  a(href='/files/list/' + item.parentReference.driveId + '/' + item.id)= item.name
+                else
+                  | #{item.name}
+              td= item['@microsoft.graph.downloadUrl'] ? 'File' : 'Folder'
+              td= item.createdBy.user.displayName
+              td= item.createdDateTime
+              td
+                a(href='/files/delete/' + item.id onclick="return confirm('Are you sure?');" class="btn btn-danger") Delete
+                | &nbsp;
+                - var isOfficeFormat = /\.(docx|xlsx|pptx)$/.test(item.name);
+                if isOfficeFormat
+                  a(href=`/files/edit/${item.id}`, target="_blank" class="btn btn-primary") Edit
+                  | &nbsp;
+                  a(href=`/files/preview/${item.id}`, target="_blank" class="btn btn-primary") Preview
+                else if item['@microsoft.graph.downloadUrl']
+                  a(href=`/files/preview/${item.id}`, target="_blank" class="btn btn-primary") Preview
+    else
+      .alert.alert-info.mb-3 No items found.
+      p.mb-3
+        a(href=`/files/upload` class="btn btn-success") Upload

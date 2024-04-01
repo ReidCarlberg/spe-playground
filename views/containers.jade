@@ -1,10 +1,11 @@
 extends layout 
 
 block content 
-    h1 Containers
+  .container.mt-4
+    h1.mb-4 Containers
     if value.length
-      table(border="1")
-        thead
+      table.table.table-bordered
+        thead.thead-dark
           tr
             th Display Name
             th Container Type ID
@@ -18,11 +19,9 @@ block content
                 a(href=`/files/list/${container.id}`)= container.displayName
               td= container.containerTypeId
               td= container.createdDateTime
-
               td= container.storageUsedInBytes
               td= container.ownershipType
     else
-      p No containers found.
-
-    p 
-        a(href=`/containers/create`)= 'Create Container'
+      .alert.alert-info.mb-3 No containers found.
+    p.mb-3
+      a(href=`/containers/create` class="btn btn-primary") Create Container

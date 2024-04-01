@@ -13,6 +13,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var containerRouter = require('./routes/containers');
 var filesRouter = require('./routes/files');
+var searchRouter = require('./routes/search');
 
 
 
@@ -42,12 +43,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/containers', containerRouter);
 app.use('/files', filesRouter);
+app.use('/search', searchRouter);
 
-//app.use('/users', usersRouter);
-
-
-
-//app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));
 app.listen(3000);
 
 module.exports = app;

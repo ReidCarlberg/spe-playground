@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  .container.mt-4
+    h1 Search Results
+    if results && results.length > 0
+      each searchResult in results
+        each searchTerm in searchResult.searchTerms
+          p Search Term: #{searchTerm}
+        each hitsContainer in searchResult.hitsContainers
+          each hit in hitsContainer.hits
+            .list-group
+              .list-group-item
+                h5.list-group-item-heading 
+                  a(href=hit.resource.webUrl target="_blank")= hit.resource.name
+                p.list-group-item-text= hit.resource.webUrl
+                p.list-group-item-text Summary: !{hit.summary}
+    else
+      p No results found for "#{query}".

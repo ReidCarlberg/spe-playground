@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  .container.mt-4
+    h1 Search
+    form(action="/search/search" method="POST")
+      .form-group
+        label(for="searchQuery") Search Query
+        input#searchQuery.form-control(type="text" name="searchQuery" required=true)
+      button.btn.btn-primary(type="submit") Search
