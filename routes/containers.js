@@ -29,10 +29,15 @@ async function apiFetch(req, url, method = 'GET', body = null) {
 
 // List Containers
 router.get('/', async (req, res) => {
+  res.render('containers_home');
+});
+
+// List Containers
+router.get('/list', async (req, res) => {
   const url = `https://graph.microsoft.com/beta/storage/fileStorage/containers?$filter=containerTypeId eq ${process.env.CONTAINER_TYPE_ID}`;
   try {
     const userData = await apiFetch(req, url);
-    res.render('containers', { value: userData.value });
+    res.render('containers_list', { value: userData.value });
   } catch (error) {
     res.status(500).send('Internal Server Error');
   }

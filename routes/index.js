@@ -26,10 +26,8 @@ const cca = new msal.ConfidentialClientApplication(msalConfig);
 
 // Home route
 router.get('/', (req, res) => {
-  console.log("hello 3");
-  console.log(req.session);
   if (req.session.isAuthenticated) {
-    res.render('/containers/');
+    res.redirect('/containers/');
   } else {
     res.render('index', { title: 'SPE Playground' } );
   }
@@ -38,8 +36,9 @@ router.get('/', (req, res) => {
 // Route to start the auth flow
 router.get('/signin', (req, res) => {
   const authCodeUrlParameters = {
-    scopes: ["user.read"],
+    scopes: ["user.read", "user.read.all", "Files.ReadWrite.All", "Sites.Read.All", "FileStorageContainer.Selected"],
     redirectUri: process.env.REDIRECT_URI,
+    //prompt: "consent"
   };
 
   cca.getAuthCodeUrl(authCodeUrlParameters).then((response) => {
@@ -54,8 +53,9 @@ router.get('/redirect', (req, res) => {
 
   const tokenRequest = {
     code: req.query.code,
-    scopes: ["user.read"],
+    scopes: ["user.read", "user.read.all", "Files.ReadWrite.All", "Sites.Read.All", "FileStorageContainer.Selected"],
     redirectUri: process.env.REDIRECT_URI,
+    //prompt: "consent"
   };
 
   cca.acquireTokenByCode(tokenRequest).then((response) => {
