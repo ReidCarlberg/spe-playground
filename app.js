@@ -10,7 +10,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
+var authRouter = require('./routes/auth');
 var containerRouter = require('./routes/containers');
 var filesRouter = require('./routes/files');
 var searchRouter = require('./routes/search');
@@ -40,7 +40,7 @@ app.use(session({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/', authRouter);
 app.use('/containers', containerRouter);
 app.use('/files', filesRouter);
 app.use('/search', searchRouter);

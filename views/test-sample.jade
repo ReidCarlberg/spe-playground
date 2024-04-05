@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  .container.mt-4
+    h1 Test Sample GET
+    form(action="/test-sample" method="POST")
+      .form-group
+        label(for="searchQuery") Sample Get URL
+        input#searchQuery.form-control(type="text" name="searchQuery" required=true)
+      button.btn.btn-primary(type="submit") Search

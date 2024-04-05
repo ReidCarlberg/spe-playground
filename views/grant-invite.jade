@@ -1,0 +1,14 @@
+extends layout
+
+block content
+    h1 Grant Invite
+    p File ID: #{fileId}
+    p Drive ID: #{driveId}
+    form(method="POST", action="/files/grant-invite")
+        input(type="hidden", name="fileId", value=fileId)
+        input(type="hidden", name="driveId", value=driveId)
+        .form-group
+            label(for="email") Email Address:
+            input(type="email", name="email", required=true)
+        button(type="submit") Send Invite
+

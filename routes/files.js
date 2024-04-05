@@ -138,4 +138,47 @@ router.get('/perms/:fileId', async (req, res) => {
     }
 });
 
+// Ensure that session middleware is properly configured and being used here
+router.get('/grant-invite/:fileId', (req, res) => {
+    if (!req.session.driveId) {
+        return res.status(400).send("Drive ID is missing in session.");
+    }
+
+    // Pass the fileId, driveId from the session, and an empty email field to the Jade template
+    res.render('grant-invite', {
+        fileId: req.params.fileId,
+        driveId: req.session.driveId,
+        email: ''  // Empty field for the email address
+    });
+});
+
+router.post('/grant-invite', async (req, res) => {
+    const { fileId, driveId, email } = req.body; // Extract fileId, driveId, and email from the submitted form data
+
+    // Construct the API URL
+    const url = `https://graph.microsoft.com/v1.0/drives/${driveId}/items/${fileId}/invite`;
+
+    // Prepare the request body
+    const body = {
+        "requireSignIn": true,
+        "sendInvitation": false,
+        "roles": ["write"],
+        "recipients": [{
+            "email": `${email}`
+        }],
+        "message": "Here is my sharing message!"
+    };
+
+    try {
+        // Call the apiFetch function to make the API request
+        const response = await apiFetch(req, url, 'POST', body);
+        res.json({ success: true, link: response.link, message: "Sharing link created successfully." });
+    } catch (error) {
+        console.error('Error creating sharing link:', error);
+        res.status(500).send("Failed to create sharing link");
+    }
+});
+
+
+
 module.exports = router;

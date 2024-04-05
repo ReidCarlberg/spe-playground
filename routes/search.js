@@ -39,6 +39,7 @@ async function performSearch(query, accessToken) {
       });
   
       if (!response.ok) {
+        console.log(response.statusText);
         throw new Error(`Graph API call failed with status: ${response.status}, status text: ${response.statusText}`);
       }
   
