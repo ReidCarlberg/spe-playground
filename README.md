@@ -2,7 +2,7 @@
 
 ## by @ReidCarlberg
 
-*** Important: although I am a Microsoft employee, this is privately produced, and you should only use it at your own risk. ***
+**Important: although I am a Microsoft employee, this is privately produced, and you should only use it at your own risk.**
 
 ### Getting Started: 
 
