@@ -15,6 +15,7 @@ async function apiFetch(req, url, method = 'GET', body = null) {
     } else if (method !== 'GET') {
         headers['Content-Type'] = 'application/json';
         body = JSON.stringify(body);
+        console.log(body);
     }
 
     try {
@@ -160,6 +161,60 @@ router.post('/grant-invite', async (req, res) => {
         console.error('Error creating sharing link:', error);
         res.status(500).send("Failed to create sharing link");
     }
+});
+
+router.get('/create-link/:fileId', (req, res) => {
+    const { fileId } = req.params;
+    res.render('create-link-form', {
+        fileId: fileId,
+        username: req.session.username
+    });
+});
+
+router.post('/link/:fileId', async (req, res) => {
+    const { fileId } = req.params;
+    const { type, scope } = req.body;
+    const driveId = req.session.driveId;
+    const url = `https://graph.microsoft.com/v1.0/drives/${driveId}/items/${fileId}/createLink`;
+
+    const body = {
+        type: type,  // "view" or "edit"
+        scope: scope // "organization", "anonymous", or "users"
+    };
+
+    try {
+        const response = await apiFetch(req, url, 'POST', body);
+        // Assuming you want to show some results page or redirect to a success page
+        res.render('link-created', { link: response.link, message: "Sharing link created successfully.", username: req.session.username });
+    } catch (error) {
+        console.error('Error creating sharing link:', error);
+        res.status(500).send("Failed to create sharing link");
+    }
+});
+
+
+router.get('/link/:fileId', async (req, res) => {
+    const { fileId } = req.params;
+    driveId = req.session.driveId;
+    const url = `https://graph.microsoft.com/v1.0/drives/${driveId}/items/${fileId}/createLink`;
+
+    /*
+        type = view or edit
+        scope = organization, anonymous, users
+    */
+    const body = {
+        "type": "view",
+        "scope": "organization"
+    }
+
+    try {
+        const response = await apiFetch(req, url, 'POST', body);
+        res.json({ success: true, link: response.link, message: "Sharing link created successfully.", username: req.session.username });
+    } catch (error) {
+        console.error('Error creating sharing link:', error);
+        res.status(500).send("Failed to create sharing link");
+    }    
+
 });
 
 module.exports = router;

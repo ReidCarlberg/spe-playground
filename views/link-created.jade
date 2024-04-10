@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1 Link Created Successfully!
+  if link
+    p Link Type: #{link.type}
+    p Link Scope: #{link.scope}
+    p Link URL: 
+      a(href=link.webUrl) #{link.webUrl}
+    p Prevents Download: #{link.preventsDownload ? 'Yes' : 'No'}
+  else
+    h1 Error
+    p Unable to create link. Please try again.

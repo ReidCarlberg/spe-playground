@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1 Create Sharing Link
+  form(method="post" action="/files/link/" + fileId)
+    input(type="hidden" name="fileId" value=fileId)
+    
+    .form-group
+      label(for="type") Link Type:
+      select(name="type" required=true)
+        option(value="view") View
+        option(value="edit") Edit
+
+    .form-group
+      label(for="scope") Link Scope:
+      select(name="scope" required=true)
+        option(value="organization") Organization
+        option(value="anonymous") Anonymous
+        option(value="users") Users
+
+    button(type="submit" class="btn btn-primary") Create Link
+
