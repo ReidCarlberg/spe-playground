@@ -2,7 +2,7 @@ extends layout
 
 block content
   .container.mt-4
-    h1 Files and Folders List
+    h1 Files and Folders List #{username}
     if items && items.length > 0
       table.table.table-bordered
         thead.thead-dark
@@ -39,6 +39,7 @@ block content
                 a(href=`/files/perms/${item.id}` class="btn btn-info") Perms
                 | &nbsp;
                 a(href=`/files/grant-invite/${item.id}` class="btn btn-info") Invite
+
     else
       .alert.alert-info.mb-3 No items found.
 

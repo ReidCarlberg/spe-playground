@@ -62,7 +62,7 @@ router.get('/redirect', (req, res) => {
     console.log("\nResponse: \n:", response);
     //console.log("\nReq: \n:", req);
     req.session.isAuthenticated = true;
-    req.session.user = response.account.username;
+    req.session.username = response.account.username;
     req.session.accessToken = response.accessToken;
     res.redirect('/containers/');
   }).catch((error) => {
@@ -104,7 +104,7 @@ router.get('/signout', async (req, res) => {
 });
 
 router.get('/test-sample', (req, res) => {
-  res.render('test-sample');
+  res.render('test-sample', { username: req.session.username });
 });
 
 async function apiFetch(req, url, method = 'GET', body = null) {

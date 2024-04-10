@@ -1,6 +1,6 @@
-extends layout 
+extends layout
 
-block content 
+block content
   .container.mt-4
     h1.mb-4 Containers
     if value.length
@@ -12,6 +12,7 @@ block content
             th Created
             th Storage Used
             th Ownership Type
+            th Actions
         tbody
           each container in value
             tr
@@ -21,8 +22,12 @@ block content
               td= container.createdDateTime
               td= container.storageUsedInBytes
               td= container.ownershipType
+              td
+                a.btn.btn-info(href=`/containers/perms/${container.id}`) View Perms &nbsp;
+                a.btn.btn-info(href=`/containers/grant-container/${container.id}`) Grant Perms
     else
       .alert.alert-info.mb-3 No containers found.
+
     p.mb-3
       a(href=`/containers/create` class="btn btn-primary") Create Container
 

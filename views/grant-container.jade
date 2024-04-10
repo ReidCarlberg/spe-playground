@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1 Grant Container Access
+  form(method="post" action="/containers/grant-container")
+    .form-group
+      label(for="driveId") Drive ID:
+      input(type="text" id="driveId" name="driveId" required=true placeholder="Enter Drive ID" value=driveId)
+    
+    .form-group
+      label(for="email") Email Address:
+      input(type="email" id="email" name="email" required=true placeholder="Enter Email Address")
+    
+    .form-group
+      label(for="role") Role:
+      select(name="role" id="role" required=true)
+        option(value="reader") Reader
+        option(value="writer") Writer
+        option(value="manager") Manager
+        option(value="owner") Owner
+
+    button(type="submit") Submit

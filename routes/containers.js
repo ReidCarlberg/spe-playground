@@ -29,7 +29,7 @@ async function apiFetch(req, url, method = 'GET', body = null) {
 
 // List Containers
 router.get('/', async (req, res) => {
-  res.render('containers_home');
+  res.render('containers_home', { username: req.session.username });
 });
 
 // List Containers
@@ -37,14 +37,14 @@ router.get('/list', async (req, res) => {
   const url = `https://graph.microsoft.com/beta/storage/fileStorage/containers?$filter=containerTypeId eq ${process.env.CONTAINER_TYPE_ID}`;
   try {
     const userData = await apiFetch(req, url);
-    res.render('containers_list', { value: userData.value });
+    res.render('containers_list', { value: userData.value, username: req.session.username });
   } catch (error) {
     res.status(500).send('Internal Server Error');
   }
 });
 
 router.get('/create', (req, res) => {
-  res.render('container_create', {});
+  res.render('container_create', { username: req.session.username });
 });
 
 router.post('/create', async (req, res) => {
@@ -58,6 +58,72 @@ router.post('/create', async (req, res) => {
     res.redirect('/containers/');
   } catch (error) {
     res.status(500).send('Error creating container');
+  }
+});
+
+// GET route to fetch container (drive) permissions
+router.get('/perms/:driveId', async (req, res) => {
+  const driveId = req.params.driveId;
+
+  if (!driveId) {
+    return res.status(400).send("Drive ID is required.");
+  }
+
+  const url = `https://graph.microsoft.com/beta/storage/fileStorage/containers/${driveId}/permissions`;
+
+  try {
+    const permissions = await apiFetch(req, url, 'GET');
+    res.json({ success: true, permissions: permissions, message: "Permissions retrieved successfully." });
+  } catch (error) {
+    console.error('Error fetching permissions:', error);
+    res.status(500).send("Failed to fetch permissions");
+  }
+});
+
+// Refactored route to accept driveId as a URL parameter
+router.get('/grant-container/:driveId', (req, res) => {
+  const driveId = req.params.driveId;
+
+  if (!driveId) {
+    return res.status(400).send("Drive ID is required.");
+  }
+
+  res.render('grant-container', {
+    driveId: driveId,
+    email: '',
+    username: req.session.username  // Include username in the rendering context
+  });
+});
+
+router.post('/grant-container', async (req, res) => {
+  const { driveId, email, role } = req.body;
+
+  if (!driveId || !email || !role) {
+    return res.status(400).send("Missing required fields");
+  }
+
+  const validRoles = ['reader', 'writer', 'manager', 'owner'];
+  if (!validRoles.includes(role)) {
+    return res.status(400).send("Invalid role specified");
+  }
+
+  const url = `https://graph.microsoft.com/beta/storage/fileStorage/containers/${driveId}/permissions`;
+
+  const body = {
+    "roles": [role],
+    "grantedToV2": {
+        "user": {
+            "userPrincipalName": email
+        }
+    }
+  };
+
+  try {
+    const response = await apiFetch(req, url, 'POST', body);
+    res.json({ success: true, permissions: response, message: "Permissions updated successfully." });
+  } catch (error) {
+    console.error('Error updating permissions:', error);
+    res.status(500).send("Failed to update permissions");
   }
 });
 

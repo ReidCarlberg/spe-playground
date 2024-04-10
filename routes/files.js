@@ -6,17 +6,13 @@ const upload = multer({ storage: storage });
 
 async function apiFetch(req, url, method = 'GET', body = null) {
     console.log(url);
-
-    // Initialize headers with Authorization
     const headers = {
         'Authorization': `Bearer ${req.session.accessToken}`,
     };
 
     if (method === 'PUT' && body instanceof Buffer) {
-        // For PUT requests with Buffer body, set Content-Type for binary data
         headers['Content-Type'] = 'application/octet-stream';
     } else if (method !== 'GET') {
-        // For other non-GET requests with non-binary body, set Content-Type to 'application/json' and stringify the body
         headers['Content-Type'] = 'application/json';
         body = JSON.stringify(body);
     }
@@ -24,42 +20,37 @@ async function apiFetch(req, url, method = 'GET', body = null) {
     try {
         const options = { method, headers };
         if (body !== undefined && method !== 'GET') options.body = body;
-
         const response = await fetch(url, options);
         if (!response.ok) {
-            // Attempt to read the response text for more detailed error info
             const errorText = await response.text();
             throw new Error(`API call failed with status: ${response.status}, status text: ${response.statusText}, error: ${errorText}`);
         }
-        // Handle no-content response
         return response.status === 204 ? {} : await response.json();
     } catch (error) {
         console.error('API Fetch error:', error);
-        throw error; // Rethrow to handle in the calling function
+        throw error;
     }
 }
 
-// Route Handlers
 router.get('/', (req, res) => {
     res.redirect('/containers/');
 });
 
 router.get('/list/:containerId/:folderId?', async (req, res) => {
+    console.log("username: ", req.session.username);
     const { containerId, folderId = 'root' } = req.params;
     const url = `https://graph.microsoft.com/v1.0/drives/${containerId}/items/${folderId}/children?$expand=listItem($expand=fields)`;
-
     try {
         const data = await apiFetch(req, url);
-        req.session.driveId = containerId;
-        req.session.folderId = folderId;
-        res.render('files_list', { items: data.value });
+        req.session.driveId=containerId;
+        res.render('files_list', { items: data.value, username: req.session.username });
     } catch (error) {
         res.status(500).send('Error fetching files');
     }
 });
 
 router.get('/upload', (req, res) => {
-    res.render('file_upload', { title: 'Upload File' });
+    res.render('file_upload', { title: 'Upload File', username: req.session.username });
 });
 
 router.post('/upload-file', upload.single('file'), async (req, res) => {
@@ -123,62 +114,52 @@ router.get('/delete/:itemId', async (req, res) => {
     }
 });
 
-// /files/perms route
 router.get('/perms/:fileId', async (req, res) => {
     const { fileId } = req.params;
-    const driveId = req.session.driveId;
-    const url = `https://graph.microsoft.com/v1.0/drives/${driveId}/items/${fileId}/permissions`;
+    const url = `https://graph.microsoft.com/v1.0/drives/${req.session.driveId}/items/${fileId}/permissions`;
 
     try {
         const permissions = await apiFetch(req, url);
-        res.json(permissions);
+        res.json({ permissions: permissions, username: req.session.username });
     } catch (error) {
         console.error('Error fetching permissions:', error);
         res.status(500).send('Error fetching permissions');
     }
 });
 
-// Ensure that session middleware is properly configured and being used here
 router.get('/grant-invite/:fileId', (req, res) => {
     if (!req.session.driveId) {
         return res.status(400).send("Drive ID is missing in session.");
     }
 
-    // Pass the fileId, driveId from the session, and an empty email field to the Jade template
     res.render('grant-invite', {
         fileId: req.params.fileId,
         driveId: req.session.driveId,
-        email: ''  // Empty field for the email address
+        email: '',
+        username: req.session.username
     });
 });
 
 router.post('/grant-invite', async (req, res) => {
-    const { fileId, driveId, email } = req.body; // Extract fileId, driveId, and email from the submitted form data
+    const { fileId, driveId, email } = req.body;
 
-    // Construct the API URL
     const url = `https://graph.microsoft.com/v1.0/drives/${driveId}/items/${fileId}/invite`;
 
-    // Prepare the request body
     const body = {
         "requireSignIn": true,
-        "sendInvitation": false,
+        "sendInvitation": true,
         "roles": ["write"],
-        "recipients": [{
-            "email": `${email}`
-        }],
+        "recipients": [{ "email": email }],
         "message": "Here is my sharing message!"
     };
 
     try {
-        // Call the apiFetch function to make the API request
         const response = await apiFetch(req, url, 'POST', body);
-        res.json({ success: true, link: response.link, message: "Sharing link created successfully." });
+        res.json({ success: true, link: response.link, message: "Sharing link created successfully.", username: req.session.username });
     } catch (error) {
         console.error('Error creating sharing link:', error);
         res.status(500).send("Failed to create sharing link");
     }
 });
-
-
 
 module.exports = router;

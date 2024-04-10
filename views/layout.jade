@@ -6,21 +6,23 @@ html
     link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    // Top menu navigation using Bootstrap's navbar
-    nav.navbar.navbar-expand-lg.navbar-light.bg-light
-      a.navbar-brand(href='/') SPE Playground
-      button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
-        span.navbar-toggler-icon
-      .collapse.navbar-collapse#navbarNav
-        ul.navbar-nav
-          li.nav-item
-            a.nav-link(href='/containers/') Containers
-          li.nav-item
-            a.nav-link(href='/search/') Search
-          li.nav-item
-            a.nav-link(href='/test-sample') Test Sample
-          li.nav-item
-            a.nav-link(href='/signout/') Sign Out
+    if username
+      nav.navbar.navbar-expand-lg.navbar-light.bg-light
+        a.navbar-brand(href='/') SPE Playground
+        button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
+          span.navbar-toggler-icon
+        .collapse.navbar-collapse#navbarNav
+          ul.navbar-nav
+            li.nav-item
+              a.nav-link(href='/containers/') Containers
+            li.nav-item
+              a.nav-link(href='/search/') Search
+            li.nav-item
+              a.nav-link(href='/test-sample') Test Sample
+            li.nav-item
+              a.nav-link(href='/signout/') Sign Out (#{username})
+    else
+      p Please log in to see the menu.
 
     block content
 

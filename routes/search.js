@@ -10,7 +10,7 @@ function printObject(obj, indent = '') {
         console.log(`${indent}${key}: ${value}`);
       }
     }
-  }
+}
 
 // Function to perform search using Microsoft Graph API
 async function performSearch(query, accessToken) {
@@ -49,10 +49,11 @@ async function performSearch(query, accessToken) {
       console.error('Search error:', error);
       throw error;
     }
-  }
+}
 
 router.get('/', (req, res) => {
-    res.render('search');
+    // Include username in the rendering context
+    res.render('search', { username: req.session.username });
 });
 
 router.post('/search', async (req, res) => {
@@ -71,10 +72,10 @@ router.post('/search', async (req, res) => {
       console.log(searchResults);
         printObject(searchResults);
       // Adjust rendering or JSON response based on your application needs
-      res.render('search_results', { query: searchQuery, results: searchResults });
+      res.render('search_results', { query: searchQuery, results: searchResults, username: req.session.username });
     } catch (error) {
       res.status(500).send('An error occurred while processing your search query.');
     }
-  });
+});
 
 module.exports = router;
