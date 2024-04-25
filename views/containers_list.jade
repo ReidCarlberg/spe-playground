@@ -3,7 +3,7 @@ extends layout
 block content
   .container.mt-4
     h1.mb-4 Containers
-    if value.length
+    if containers.length
       table.table.table-bordered
         thead.thead-dark
           tr
@@ -14,7 +14,7 @@ block content
             th Ownership Type
             th Actions
         tbody
-          each container in value
+          each container in containers
             tr
               td
                 a(href=`/files/list/${container.id}`)= container.displayName
@@ -31,6 +31,6 @@ block content
     p.mb-3
       a(href=`/containers/create` class="btn btn-primary") Create Container
 
-  // Display raw JSON for item
-  h2 Raw JSON Files and Folders List
-  pre= JSON.stringify(value, null, 2)
+
+
+  

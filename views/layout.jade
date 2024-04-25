@@ -26,6 +26,21 @@ html
 
     block content
 
+    if orig_url || orig_body || orig_results
+      h2 Raw
+
+    if orig_url
+      h3 URL 
+      pre #{orig_url}
+
+    if orig_body 
+      h3 Body 
+      pre= JSON.stringify(orig_body, null, 2)
+
+    if orig_results 
+      h3 Results 
+      pre= JSON.stringify(orig_results, null, 2)
+
     // Bootstrap JS, Popper.js, and jQuery
     script(src='https://code.jquery.com/jquery-3.5.1.slim.min.js')
     script(src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js')

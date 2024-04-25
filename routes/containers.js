@@ -37,7 +37,7 @@ router.get('/list', async (req, res) => {
   const url = `https://graph.microsoft.com/beta/storage/fileStorage/containers?$filter=containerTypeId eq ${process.env.CONTAINER_TYPE_ID}`;
   try {
     const userData = await apiFetch(req, url);
-    res.render('containers_list', { value: userData.value, username: req.session.username });
+    res.render('containers_list', { containers: userData.value, username: req.session.username, orig_url: url, orig_results: userData.value });
   } catch (error) {
     res.status(500).send('Internal Server Error');
   }

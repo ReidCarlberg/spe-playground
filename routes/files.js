@@ -44,7 +44,7 @@ router.get('/list/:containerId/:folderId?', async (req, res) => {
     try {
         const data = await apiFetch(req, url);
         req.session.driveId=containerId;
-        res.render('files_list', { items: data.value, username: req.session.username });
+        res.render('files_list', { items: data.value, username: req.session.username, orig_url: url, orig_results: data.value });
     } catch (error) {
         res.status(500).send('Error fetching files');
     }
@@ -148,10 +148,10 @@ router.post('/grant-invite', async (req, res) => {
 
     const body = {
         "requireSignIn": true,
-        "sendInvitation": true,
+        "sendInvitation": false,
         "roles": ["write"],
         "recipients": [{ "email": email }],
-        "message": "Here is my sharing message!"
+        "message": null
     };
 
     try {

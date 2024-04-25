@@ -85,6 +85,7 @@ router.get('/app-only', (req, res) => {
     req.session.accessToken=response.accessToken;
     req.session.isAuthenticated=true;
     req.session.username="App Only";
+    //this is to a particular drive that should be accessible
     res.redirect("/files/list/b!K5F58af6_0-N0Zw7krCohkuGBOJGX99FsI5my3MKOBiKBLIE-urbS4k3xAFAFCqi");
   }).catch((error) => console.log(JSON.stringify(error)));
 });
