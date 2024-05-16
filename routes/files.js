@@ -80,7 +80,22 @@ router.get('/preview/:itemId', async (req, res) => {
     try {
         const data = await apiFetch(req, url, 'POST');
         if (data.getUrl) {
-            res.redirect(data.getUrl);
+            res.redirect(data.getUrl + "&nb=true");
+        } else {
+            res.status(404).send('Preview URL not found in the response.');
+        }
+    } catch (error) {
+        res.status(500).send('Failed to retrieve preview URL');
+    }
+});
+
+router.get('/preview/:driveId/:itemId', async (req, res) => {
+    const url = `https://graph.microsoft.com/v1.0/drives/${req.params.driveId}/items/${req.params.itemId}/preview`;
+
+    try {
+        const data = await apiFetch(req, url, 'POST');
+        if (data.getUrl) {
+            res.redirect(data.getUrl + "&nb=true");
         } else {
             res.status(404).send('Preview URL not found in the response.');
         }

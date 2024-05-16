@@ -12,8 +12,7 @@ block content
             .list-group
               .list-group-item
                 h5.list-group-item-heading 
-                  a(href=hit.resource.webUrl target="_blank")= hit.resource.name
-                p.list-group-item-text= hit.resource.webUrl
+                  a(href='/files/preview/' + hit.resource.parentReference.driveId + '/' + hit.resource.id)= hit.resource.name
                 p.list-group-item-text Summary: !{hit.summary}
     else
       p No results found for "#{query}".

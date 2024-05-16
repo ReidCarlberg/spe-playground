@@ -25,6 +25,7 @@ block content
               td
                 a.btn.btn-info(href=`/containers/perms/${container.id}`) View Perms &nbsp;
                 a.btn.btn-info(href=`/containers/grant-container/${container.id}`) Grant Perms
+                a(href='/containers/delete/' + container.id onclick="return confirm('Are you sure?');" class="btn btn-danger") Delete
     else
       .alert.alert-info.mb-3 No containers found.
 

@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  h1 Permissions List
+  if permissions && permissions.value && permissions.value.length
+    table.table.table-striped
+      thead
+        tr
+          th Display Name
+          th Email
+          th User Principal Name
+          th Roles
+          th ID
+      tbody
+        each perm in permissions.value
+          tr
+            td= perm.grantedToV2.user.displayName
+            td= perm.grantedToV2.user.email
+            td= perm.grantedToV2.user.userPrincipalName
+            td= perm.roles.join(', ')
+            td= perm.id
+  else
+    p No permissions found.

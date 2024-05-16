@@ -72,8 +72,9 @@ router.get('/perms/:driveId', async (req, res) => {
   const url = `https://graph.microsoft.com/beta/storage/fileStorage/containers/${driveId}/permissions`;
 
   try {
-    const permissions = await apiFetch(req, url, 'GET');
-    res.json({ success: true, permissions: permissions, message: "Permissions retrieved successfully." });
+    const results = await apiFetch(req, url, 'GET');
+    res.render("container_perms", { username: req.session.username , permissions: results, orig_url: url, orig_results: results});
+    //res.json({ success: true, permissions: permissions, message: "Permissions retrieved successfully." });
   } catch (error) {
     console.error('Error fetching permissions:', error);
     res.status(500).send("Failed to fetch permissions");
@@ -124,6 +125,17 @@ router.post('/grant-container', async (req, res) => {
   } catch (error) {
     console.error('Error updating permissions:', error);
     res.status(500).send("Failed to update permissions");
+  }
+});
+
+router.get('/delete/:containerId', async (req, res) => {
+  const url = `https://graph.microsoft.com/beta/storage/fileStorage/containers//${req.params.containerId}`;
+
+  try {
+      await apiFetch(req, url, 'DELETE');
+      res.redirect('/containers/list');
+  } catch (error) {
+      res.status(500).send('Error deleting container');
   }
 });
 

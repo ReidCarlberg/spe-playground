@@ -48,8 +48,8 @@ router.get('/signin', (req, res) => {
 
 // Route to receive the token
 router.get('/redirect', (req, res) => {
-  console.log("app hello 2" );
-  console.log(req.session);
+  //console.log("app hello 2" );
+  //console.log(req.session);
 
   const tokenRequest = {
     code: req.query.code,
