@@ -2,7 +2,6 @@ doctype html
 html
   head
     title= title
-    // Bootstrap CSS
     link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
@@ -22,26 +21,38 @@ html
             li.nav-item
               a.nav-link(href='/signout/') Sign Out (#{username})
     else
-      p Please log in to see the menu.
+      p Visit 
+        a(href='https://aka.ms/start-spe') aka.ms/start-spe 
+        |  to learn more
 
     block content
-
+    
+    // Details section with toggle button
     if orig_url || orig_body || orig_results
-      h2 Raw
+      button#toggleButton.btn.btn-success.fixed-bottom(type='button', data-toggle='collapse', data-target='#detailsSection', aria-expanded='false', aria-controls='detailsSection') Show API Details
+      .collapse#detailsSection
+        p.mt-4.mb-3.font-weight-bold API Details
+        if orig_url
+          p.mb-2.font-weight-bold URL 
+          pre #{orig_url}
+        if orig_body 
+          p.mb-2.font-weight-bold Body 
+          pre= JSON.stringify(orig_body, null, 2)
+        if orig_results 
+          p.mb-2.font-weight-bold Results 
+          pre= JSON.stringify(orig_results, null, 2)
+    else
+      button.btn.btn-secondary.disabled.fixed-bottom(type='button') No Details Available
 
-    if orig_url
-      h3 URL 
-      pre #{orig_url}
-
-    if orig_body 
-      h3 Body 
-      pre= JSON.stringify(orig_body, null, 2)
-
-    if orig_results 
-      h3 Results 
-      pre= JSON.stringify(orig_results, null, 2)
-
-    // Bootstrap JS, Popper.js, and jQuery
-    script(src='https://code.jquery.com/jquery-3.5.1.slim.min.js')
+    script(src='https://code.jquery.com/jquery-3.5.1.min.js')
     script(src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js')
     script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js')
+    script.
+      $(document).ready(function() {
+        $('#detailsSection').on('show.bs.collapse', function () {
+          $('html, body').animate({ scrollTop: 0 }, 'fast');
+          $('#toggleButton').text('Hide API Details');
+        }).on('hide.bs.collapse', function () {
+          $('#toggleButton').text('Show API Details');
+        });
+      });

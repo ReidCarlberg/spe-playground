@@ -29,7 +29,8 @@ async function apiFetch(req, url, method = 'GET', body = null) {
 
 // List Containers
 router.get('/', async (req, res) => {
-  res.render('containers_home', { username: req.session.username });
+  //res.render('containers_home', { username: req.session.username });
+  res.render('containers_demo', { username: req.session.username });
 });
 
 // List Containers
@@ -55,7 +56,7 @@ router.post('/create', async (req, res) => {
 
   try {
     await apiFetch(req, url, 'POST', bodyData);
-    res.redirect('/containers/');
+    res.redirect('/containers/list');
   } catch (error) {
     res.status(500).send('Error creating container');
   }
@@ -136,6 +137,32 @@ router.get('/delete/:containerId', async (req, res) => {
       res.redirect('/containers/list');
   } catch (error) {
       res.status(500).send('Error deleting container');
+  }
+});
+
+router.get('/registerContainerType', async (req, res) => {
+  const RootSiteUrl = process.env.ROOT_URL; // Assuming ROOT_SITE_URL is stored in environment variables
+  const ClientID = process.env.CLIENT_ID; // Assuming ClientID is stored in environment variables
+  const ContainerTypeId = process.env.CONTAINER_TYPE_ID;
+
+  const url = `${RootSiteUrl}/_api/v2.1/storageContainerTypes/${ContainerTypeId}/applicationPermissions`;
+
+  const body = {
+      "value": [
+          {
+              "appId": ClientID,
+              "delegated": ["full"],
+              "appOnly": ["full"]
+          }
+      ]
+  };
+
+  try {
+      await apiFetch(req, url, 'PUT', body);
+      res.send('Permissions updated successfully.');
+  } catch (error) {
+      console.error('Error updating permissions:', error);
+      res.status(500).send('Error updating permissions');
   }
 });
 
