@@ -140,30 +140,6 @@ router.get('/delete/:containerId', async (req, res) => {
   }
 });
 
-router.get('/registerContainerType', async (req, res) => {
-  const RootSiteUrl = process.env.ROOT_URL; // Assuming ROOT_SITE_URL is stored in environment variables
-  const ClientID = process.env.CLIENT_ID; // Assuming ClientID is stored in environment variables
-  const ContainerTypeId = process.env.CONTAINER_TYPE_ID;
 
-  const url = `${RootSiteUrl}/_api/v2.1/storageContainerTypes/${ContainerTypeId}/applicationPermissions`;
-
-  const body = {
-      "value": [
-          {
-              "appId": ClientID,
-              "delegated": ["full"],
-              "appOnly": ["full"]
-          }
-      ]
-  };
-
-  try {
-      await apiFetch(req, url, 'PUT', body);
-      res.send('Permissions updated successfully.');
-  } catch (error) {
-      console.error('Error updating permissions:', error);
-      res.status(500).send('Error updating permissions');
-  }
-});
 
 module.exports = router;

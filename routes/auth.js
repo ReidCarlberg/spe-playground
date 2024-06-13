@@ -3,6 +3,8 @@ var router = express.Router();
 
 const msal = require('@azure/msal-node');
 
+const apiFetch = require('./common');
+
 // MSAL config
 const msalConfig = {
   auth: {
@@ -86,9 +88,28 @@ router.get('/app-only', (req, res) => {
     req.session.isAuthenticated=true;
     req.session.username="App Only";
     //this is to a particular drive that should be accessible
-    res.redirect("/files/list/b!K5F58af6_0-N0Zw7krCohkuGBOJGX99FsI5my3MKOBiKBLIE-urbS4k3xAFAFCqi");
+    res.redirect("/apponly/");
   }).catch((error) => console.log(JSON.stringify(error)));
 });
+
+// App-Only
+router.get('/sharepoint-only', (req, res) => {
+  const authCodeUrlParameters = {
+    scopes: ["https://zdmv6.sharepoint.com/.default"],
+    //prompt: "consent"
+  };
+
+  cca.acquireTokenByClientCredential(authCodeUrlParameters).then((response) => {
+    console.log("Token acquired: ", response.accessToken);
+    console.log(response);
+    req.session.accessToken=response.accessToken;
+    req.session.isAuthenticated=true;
+    req.session.username="App Only";
+    //this is to a particular drive that should be accessible
+    res.redirect("/apponly/");
+  }).catch((error) => console.log(JSON.stringify(error)));
+});
+
 
 // Route to handle signout
 router.get('/signout', async (req, res) => {
@@ -108,40 +129,8 @@ router.get('/test-sample', (req, res) => {
   res.render('test-sample', { username: req.session.username });
 });
 
-async function apiFetch(req, url, method = 'GET', body = null) {
-  console.log(url);
 
-  // Initialize headers with Authorization
-  const headers = {
-      'Authorization': `Bearer ${req.session.accessToken}`,
-  };
 
-  if (method === 'PUT' && body instanceof Buffer) {
-      // For PUT requests with Buffer body, set Content-Type for binary data
-      headers['Content-Type'] = 'application/octet-stream';
-  } else if (method !== 'GET') {
-      // For other non-GET requests with non-binary body, set Content-Type to 'application/json' and stringify the body
-      headers['Content-Type'] = 'application/json';
-      body = JSON.stringify(body);
-  }
-
-  try {
-      const options = { method, headers };
-      if (body !== undefined && method !== 'GET') options.body = body;
-
-      const response = await fetch(url, options);
-      if (!response.ok) {
-          // Attempt to read the response text for more detailed error info
-          const errorText = await response.text();
-          throw new Error(`API call failed with status: ${response.status}, status text: ${response.statusText}, error: ${errorText}`);
-      }
-      // Handle no-content response
-      return response.status === 204 ? {} : await response.json();
-  } catch (error) {
-      console.error('API Fetch error:', error);
-      throw error; // Rethrow to handle in the calling function
-  }
-}
 
 
 router.post('/test-sample', async (req, res) => {
