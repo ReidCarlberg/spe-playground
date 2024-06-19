@@ -27,6 +27,17 @@ async function apiFetch(req, url, method = 'GET', body = null) {
     }
 }
 
+function printObject(obj, indent = '') {
+  for (const [key, value] of Object.entries(obj)) {
+    if (typeof value === 'object' && value !== null) {
+      console.log(`${indent}${key}: `);
+      printObject(value, indent + '  '); // Recursive call with increased indentation
+    } else {
+      console.log(`${indent}${key}: ${value}`);
+    }
+  }
+}
+
 // List Containers
 router.get('/', async (req, res) => {
   //res.render('containers_home', { username: req.session.username });
@@ -38,7 +49,7 @@ router.get('/list', async (req, res) => {
   const url = `https://graph.microsoft.com/beta/storage/fileStorage/containers?$filter=containerTypeId eq ${process.env.CONTAINER_TYPE_ID}`;
   try {
     const userData = await apiFetch(req, url);
-    res.render('containers_list', { containers: userData.value, username: req.session.username, orig_url: url, orig_results: userData.value });
+    res.render('containers_list', { containers: userData.value, orig_url: url, orig_results: userData.value });
   } catch (error) {
     res.status(500).send('Internal Server Error');
   }
@@ -74,7 +85,8 @@ router.get('/perms/:driveId', async (req, res) => {
 
   try {
     const results = await apiFetch(req, url, 'GET');
-    res.render("container_perms", { username: req.session.username , permissions: results, orig_url: url, orig_results: results});
+    console.log(JSON.stringify(results));
+    res.render("container_perms", {  permissions: results, orig_url: url, orig_results: results});
     //res.json({ success: true, permissions: permissions, message: "Permissions retrieved successfully." });
   } catch (error) {
     console.error('Error fetching permissions:', error);
@@ -97,6 +109,7 @@ router.get('/grant-container/:driveId', (req, res) => {
   });
 });
 
+
 router.post('/grant-container', async (req, res) => {
   const { driveId, email, role } = req.body;
 
@@ -104,12 +117,7 @@ router.post('/grant-container', async (req, res) => {
     return res.status(400).send("Missing required fields");
   }
 
-  const validRoles = ['reader', 'writer', 'manager', 'owner'];
-  if (!validRoles.includes(role)) {
-    return res.status(400).send("Invalid role specified");
-  }
-
-  const url = `https://graph.microsoft.com/beta/storage/fileStorage/containers/${driveId}/permissions`;
+  const url = `https://graph.microsoft.com/v1.0/storage/fileStorage/containers/${driveId}/permissions`;
 
   const body = {
     "roles": [role],
@@ -119,6 +127,9 @@ router.post('/grant-container', async (req, res) => {
         }
     }
   };
+
+  console.log(url);
+  console.log(body);
 
   try {
     const response = await apiFetch(req, url, 'POST', body);

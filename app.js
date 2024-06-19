@@ -11,6 +11,7 @@ var sharepointRouter = require('./routes/sharepoint');
 var containerRouter = require('./routes/containers');
 var filesRouter = require('./routes/files');
 var searchRouter = require('./routes/search');
+var metadataRouter = require('./routes/metadata');
 
 var app = express();
 
@@ -46,6 +47,7 @@ app.use('/sharepoint', sharepointRouter);
 app.use('/containers', authenticate, containerRouter);
 app.use('/files', authenticate, filesRouter);
 app.use('/search', authenticate, searchRouter);
+app.use('/metadata', authenticate, metadataRouter);
 
 app.listen(3000);
 

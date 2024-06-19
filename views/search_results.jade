@@ -5,14 +5,21 @@ block content
     h1 Search Results
     if results && results.length > 0
       each searchResult in results
-        each searchTerm in searchResult.searchTerms
-          p Search Term: #{searchTerm}
-        each hitsContainer in searchResult.hitsContainers
-          each hit in hitsContainer.hits
-            .list-group
-              .list-group-item
-                h5.list-group-item-heading 
-                  a(href='/files/preview/' + hit.resource.parentReference.driveId + '/' + hit.resource.id)= hit.resource.name
-                p.list-group-item-text Summary: !{hit.summary}
+        if searchResult.searchTerms && searchResult.searchTerms.length > 0
+          each searchTerm in searchResult.searchTerms
+            p Search Term: #{searchTerm}
+        if searchResult.hitsContainers && searchResult.hitsContainers.length > 0
+          each hitsContainer in searchResult.hitsContainers
+            if hitsContainer.hits && hitsContainer.hits.length > 0
+              .list-group
+                each hit in hitsContainer.hits
+                  .list-group-item
+                    h5.list-group-item-heading 
+                      a(href='/files/preview/' + hit.resource.parentReference.driveId + '/' + hit.resource.id)= hit.resource.name
+                    p.list-group-item-text Summary: #{hit.summary}
+            else
+              p No hits found.
+        else
+          p No hit containers found.
     else
-      p No results found for "#{query}".
+      p No results found.

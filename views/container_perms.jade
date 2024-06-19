@@ -8,15 +8,20 @@ block content
         tr
           th Display Name
           th Email
-          th User Principal Name
+          th User Principal Name / Group Identifier
           th Roles
           th ID
       tbody
         each perm in permissions.value
           tr
-            td= perm.grantedToV2.user.displayName
-            td= perm.grantedToV2.user.email
-            td= perm.grantedToV2.user.userPrincipalName
+            if perm.grantedToV2.user
+              td= perm.grantedToV2.user.displayName
+              td= perm.grantedToV2.user.email
+              td= perm.grantedToV2.user.userPrincipalName
+            else if perm.grantedToV2.group
+              td= perm.grantedToV2.group.displayName
+              td= perm.grantedToV2.group.email
+              td= 'Group'
             td= perm.roles.join(', ')
             td= perm.id
   else

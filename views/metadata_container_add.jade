@@ -1,0 +1,57 @@
+extends layout
+
+block content
+  .container.mt-4
+    h1 Add New Metadata Column
+    form(action="/metadata/submit_new_column", method="post")
+      .form-group
+        label(for="name") Name
+        input#name.form-control(type="text", name="name", required="required")
+
+      .form-group
+        label(for="displayName") Name
+        input#name.form-control(type="text", name="displayName", required="required")
+
+      .form-group
+        label(for="description") Description
+        input#description.form-control(type="text", name="description")
+
+      .form-group
+        label(for="enforceUniqueValues") Enforce Unique Values
+        select#enforceUniqueValues.form-control(name="enforceUniqueValues")
+          option(value="false" selected) No
+          option(value="true") Yes
+
+      .form-group
+        label(for="hidden") Hidden
+        select#hidden.form-control(name="hidden")
+          option(value="false" selected) No
+          option(value="true") Yes
+
+      .form-group
+        label(for="indexed") Indexed
+        select#indexed.form-control(name="indexed")
+          option(value="false" selected) No
+          option(value="true") Yes
+
+      .form-group
+        label(for="allowMultipleLines") Allow Multiple Lines
+        select#allowMultipleLines.form-control(name="text[allowMultipleLines]")
+          option(value="false" selected) No
+          option(value="true") Yes
+
+      .form-group
+        label(for="appendChangesToExistingText") Append Changes to Existing Text
+        select#appendChangesToExistingText.form-control(name="text[appendChangesToExistingText]")
+          option(value="false" selected) No
+          option(value="true") Yes
+
+      .form-group
+        label(for="linesForEditing") Lines for Editing
+        input#linesForEditing.form-control(type="number", name="text[linesForEditing]", value="0")
+
+      .form-group
+        label(for="maxLength") Max Length
+        input#maxLength.form-control(type="number", name="text[maxLength]", value="255")
+
+      button.btn.btn-success(type="submit") Submit New Metadata

@@ -55,9 +55,6 @@ router.get('/upload', (req, res) => {
 });
 
 router.post('/upload-file', upload.single('file'), async (req, res) => {
-    if (!req.session.isAuthenticated || !req.session.accessToken) {
-        return res.status(401).send('You are not authenticated');
-    }
 
     if (!req.file || Object.keys(req.file).length === 0) {
         return res.status(400).send('No files were uploaded.');
@@ -136,7 +133,7 @@ router.get('/perms/:fileId', async (req, res) => {
 
     try {
         const permissions = await apiFetch(req, url);
-        res.json({ permissions: permissions, username: req.session.username });
+        res.json({ permissions: permissions });
     } catch (error) {
         console.error('Error fetching permissions:', error);
         res.status(500).send('Error fetching permissions');
@@ -171,7 +168,7 @@ router.post('/grant-invite', async (req, res) => {
 
     try {
         const response = await apiFetch(req, url, 'POST', body);
-        res.json({ success: true, link: response.link, message: "Sharing link created successfully.", username: req.session.username });
+        res.json({ success: true, link: response.link, message: "Sharing link created successfully." });
     } catch (error) {
         console.error('Error creating sharing link:', error);
         res.status(500).send("Failed to create sharing link");
@@ -200,7 +197,7 @@ router.post('/link/:fileId', async (req, res) => {
     try {
         const response = await apiFetch(req, url, 'POST', body);
         // Assuming you want to show some results page or redirect to a success page
-        res.render('link-created', { link: response.link, message: "Sharing link created successfully.", username: req.session.username });
+        res.render('link-created', { link: response.link, message: "Sharing link created successfully." });
     } catch (error) {
         console.error('Error creating sharing link:', error);
         res.status(500).send("Failed to create sharing link");
@@ -225,6 +222,42 @@ router.get('/link/:fileId', async (req, res) => {
     try {
         const response = await apiFetch(req, url, 'POST', body);
         res.json({ success: true, link: response.link, message: "Sharing link created successfully.", username: req.session.username });
+    } catch (error) {
+        console.error('Error creating sharing link:', error);
+        res.status(500).send("Failed to create sharing link");
+    }    
+
+});
+
+router.get('/fields/:fileId', async (req, res) => {
+    const { fileId } = req.params;
+    driveId = req.session.driveId;
+    const url = `https://graph.microsoft.com/v1.0/drives/${driveId}/items/${fileId}/listitem/fields`;
+
+    try {
+        const response = await apiFetch(req, url);
+        res.json({ success: true, data: response });
+    } catch (error) {
+        console.error('Error creating sharing link:', error);
+        res.status(500).send("Failed to create sharing link");
+    }    
+
+});
+
+router.get('/fields/setreid/:fileId', async (req, res) => {
+    const { fileId } = req.params;
+    driveId = req.session.driveId;
+    const url = `https://graph.microsoft.com/v1.0/drives/${driveId}/items/${fileId}/listitem/fields`;
+
+    body = {
+        "Reid1": "setReid1",
+        "Reid2": "set Reid 2",
+        "Reid3": "reid3evergreen"
+    }
+
+    try {
+        const response = await apiFetch(req, url, 'PATCH', body);
+        res.json({ success: true, data: response });
     } catch (error) {
         console.error('Error creating sharing link:', error);
         res.status(500).send("Failed to create sharing link");

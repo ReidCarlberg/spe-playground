@@ -38,7 +38,8 @@ router.get('/', (req, res) => {
 // Route to start the auth flow
 router.get('/signin', (req, res) => {
   const authCodeUrlParameters = {
-    scopes: ["user.read", "user.read.all", "Files.ReadWrite.All", "Sites.Read.All", "FileStorageContainer.Selected"],
+    //scopes: ["user.read", "user.read.all", "Files.Read.All", "Files.ReadWrite.All", "Sites.Read.All", "Sites.ReadWrite.All", "FileStorageContainer.Selected"],
+    scopes: ["user.read", "FileStorageContainer.Selected"],
     redirectUri: process.env.REDIRECT_URI,
     //prompt: "consent"
   };
@@ -55,7 +56,8 @@ router.get('/redirect', (req, res) => {
 
   const tokenRequest = {
     code: req.query.code,
-    scopes: ["user.read", "user.read.all", "Files.ReadWrite.All", "Sites.Read.All", "FileStorageContainer.Selected"],
+//    scopes: ["user.read", "user.read.all", "Files.Read.All", "Files.ReadWrite.All", "Sites.Read.All", "Sites.ReadWrite.All", "FileStorageContainer.Selected"],
+    scopes: ["user.read", "FileStorageContainer.Selected"],
     redirectUri: process.env.REDIRECT_URI,
     //prompt: "consent"
   };
@@ -92,24 +94,6 @@ router.get('/app-only', (req, res) => {
   }).catch((error) => console.log(JSON.stringify(error)));
 });
 
-// App-Only
-router.get('/sharepoint-only', (req, res) => {
-  const authCodeUrlParameters = {
-    scopes: ["https://zdmv6.sharepoint.com/.default"],
-    //prompt: "consent"
-  };
-
-  cca.acquireTokenByClientCredential(authCodeUrlParameters).then((response) => {
-    console.log("Token acquired: ", response.accessToken);
-    console.log(response);
-    req.session.accessToken=response.accessToken;
-    req.session.isAuthenticated=true;
-    req.session.username="App Only";
-    //this is to a particular drive that should be accessible
-    res.redirect("/apponly/");
-  }).catch((error) => console.log(JSON.stringify(error)));
-});
-
 
 // Route to handle signout
 router.get('/signout', async (req, res) => {
@@ -125,12 +109,10 @@ router.get('/signout', async (req, res) => {
   }
 });
 
+
 router.get('/test-sample', (req, res) => {
   res.render('test-sample', { username: req.session.username });
 });
-
-
-
 
 
 router.post('/test-sample', async (req, res) => {

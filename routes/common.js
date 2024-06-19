@@ -16,6 +16,8 @@ async function apiFetch(req, url, method = 'GET', body = null) {
     body = JSON.stringify(body);
   }
 
+  console.log(body);
+  
   try {
     const options = { method, headers };
     if (body !== undefined && method !== 'GET') options.body = body;

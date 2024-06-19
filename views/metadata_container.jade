@@ -1,0 +1,40 @@
+extends layout
+
+block content
+  .container.mt-4
+    h1 Container Metadata Columns 
+    if message
+      p.alert.alert-info #{message}
+    
+    if columns && columns.length > 0
+      table.table.table-hover
+        thead
+          tr
+            th Name
+            th Display Name
+            th Description
+            th Hidden
+            th Indexed
+            th Read Only
+            th Required
+            th Max Length
+            th Id
+        tbody
+          each column in columns
+            tr
+              td #{column.name}
+              td #{column.displayName}
+              td #{column.description || 'N/A'}
+              td #{column.hidden ? 'Yes' : 'No'}
+              td #{column.indexed ? 'Yes' : 'No'}
+              td #{column.readOnly ? 'Yes' : 'No'}
+              td #{column.required ? 'Yes' : 'No'}
+              td 
+                if column.text 
+                    #{column.text.maxLength}
+              td #{column.id}
+    else
+      p No columns found.
+    
+    // Add Button
+    a.btn.btn-primary(href="/metadata/new_column") Add New Metadata Column
