@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const apiFetch = require('./common');  // Ensure this points to your common.js file correctly
+const apiFetch = require('./common');  
 
 function printObject(obj, indent = '') {
     for (const [key, value] of Object.entries(obj)) {
@@ -84,15 +84,16 @@ router.get('/searchSample', async (req, res) => {
 router.get('/searchDrives', async (req, res) => {
   const { searchQuery } = req.body; // Make sure this aligns with how you're sending data from the frontend
 
+  //console.log(JSON.stringify(res.getHeaders()));
 
-  const url = `https://graph.microsoft.com/beta/search/query`;
+  const url = `https://graph.microsoft.com/v1.0/search/query`;
 
   const body = {
       requests: [
           {
               entityTypes: ["drive"],
               query: {
-                  queryString: `CustomProp1OWSTEXT:'prop1'`
+                  queryString: `CustomProp1:'prop1'`
               }
           },
       ],
@@ -102,8 +103,8 @@ router.get('/searchDrives', async (req, res) => {
       const response = await apiFetch(req, url, 'POST', body); 
 
       const searchResults = response.value; // Adjust based on the actual structure of the response
-      console.log(searchResults);
-      printObject(searchResults); // Assuming `printObject` is defined somewhere or replace with appropriate logic
+      //console.log(JSON.stringify(response));
+      //printObject(searchResults); // Assuming `printObject` is defined somewhere or replace with appropriate logic
       // Adjust rendering or JSON response based on your application needs
       res.render('search_results', { query: searchQuery, results: searchResults,  orig_url: url, orig_body: body, orig_results: searchResults });
   } catch (error) {

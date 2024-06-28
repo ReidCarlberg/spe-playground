@@ -66,8 +66,9 @@ router.post('/create', async (req, res) => {
   const bodyData = { displayName, description, containerTypeId };
 
   try {
-    await apiFetch(req, url, 'POST', bodyData);
-    res.redirect('/containers/list');
+    results = await apiFetch(req, url, 'POST', bodyData);
+    //res.redirect('/containers/list');
+    res.render('success', { orig_url: url, orig_body: bodyData, orig_results: results, message: 'Container created successfully.', continueUrl: '/containers/list'});
   } catch (error) {
     res.status(500).send('Error creating container');
   }

@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const apiFetch = require('./common');  // Ensure this points to your common.js file correctly
-
+const apiFetch = require('./common');  
 
 
 router.get('/list/:containerId', async (req, res) => {

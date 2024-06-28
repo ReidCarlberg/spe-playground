@@ -3,7 +3,7 @@ const router = express.Router();
 const msal = require('@azure/msal-node');
 const fs = require('fs');
 const path = require('path');
-const apiFetch = require('./common');  // Ensure this points to your common.js file correctly
+const apiFetch = require('./common');  
 
 require('dotenv').config();
 

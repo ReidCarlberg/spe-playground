@@ -64,8 +64,15 @@ router.post('/upload-file', upload.single('file'), async (req, res) => {
     const url = `https://graph.microsoft.com/v1.0/drives/${req.session.driveId}/items/${folderId}:/${encodeURIComponent(req.file.originalname)}:/content`;
 
     try {
-        await apiFetch(req, url, 'PUT', req.file.buffer);
-        res.redirect(`/files/list/${req.session.driveId}/${folderId !== 'root' ? folderId : ''}`);
+        result = await apiFetch(req, url, 'PUT', req.file.buffer);
+        //res.redirect(`/files/list/${req.session.driveId}/${folderId !== 'root' ? folderId : ''}`);
+
+        res.render('success', {message: 'Uploaded', 
+            continueUrl: `/files/list/${req.session.driveId}/${folderId !== 'root' ? folderId : ''}`,
+            orig_url: url,
+            orig_results: result
+        });
+
     } catch (error) {
         res.status(500).send('Error uploading file');
     }

@@ -29,6 +29,7 @@ async function apiFetch(req, url, method = 'GET', body = null) {
       throw new Error(`API call failed with status: ${response.status}, status text: ${response.statusText}, error: ${errorText}`);
     }
     // Handle no-content response
+    //console.log(response);
     return response.status === 204 ? {} : await response.json();
   } catch (error) {
     console.error('API Fetch error:', error);
