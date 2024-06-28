@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  .container.mt-4
+    h1 Success!
+
+    a.btn.btn-primary(href=continueUrl) Continue
+
+    script.
+      // Script to automatically show the details section when the page loads
+      document.addEventListener('DOMContentLoaded', function () {
+        $('#detailsSection').collapse('show');
+      });

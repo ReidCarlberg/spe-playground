@@ -39,7 +39,7 @@ router.get('/', (req, res) => {
 router.get('/signin', (req, res) => {
   const authCodeUrlParameters = {
     //scopes: ["user.read", "user.read.all", "Files.Read.All", "Files.ReadWrite.All", "Sites.Read.All", "Sites.ReadWrite.All", "FileStorageContainer.Selected"],
-    scopes: ["user.read", "FileStorageContainer.Selected"],
+    scopes: ["user.read", "FileStorageContainer.Selected", "User.RevokeSessions.All"],
     redirectUri: process.env.REDIRECT_URI,
     //prompt: "consent"
   };
@@ -57,7 +57,7 @@ router.get('/redirect', (req, res) => {
   const tokenRequest = {
     code: req.query.code,
 //    scopes: ["user.read", "user.read.all", "Files.Read.All", "Files.ReadWrite.All", "Sites.Read.All", "Sites.ReadWrite.All", "FileStorageContainer.Selected"],
-    scopes: ["user.read", "FileStorageContainer.Selected"],
+    scopes: ["user.read", "FileStorageContainer.Selected", "User.RevokeSessions.All"],
     redirectUri: process.env.REDIRECT_URI,
     //prompt: "consent"
   };
@@ -98,6 +98,9 @@ router.get('/app-only', (req, res) => {
 // Route to handle signout
 router.get('/signout', async (req, res) => {
   try {
+    // https://graph.microsoft.com/v1.0/me/revokeSignInSessions
+    await apiFetch(req, "https://graph.microsoft.com/v1.0/me/revokeSignInSessions", "POST");
+
     // Clear the token cache to sign the user out
     req.session.accessToken=null;
     req.session.isAuthenticated=null;

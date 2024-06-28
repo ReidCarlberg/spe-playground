@@ -197,7 +197,7 @@ router.post('/link/:fileId', async (req, res) => {
     try {
         const response = await apiFetch(req, url, 'POST', body);
         // Assuming you want to show some results page or redirect to a success page
-        res.render('link-created', { link: response.link, message: "Sharing link created successfully." });
+        res.render('link-created', { link: response.link, message: "Sharing link created successfully.", orig_url: url, orig_body: body, orig_results: response });
     } catch (error) {
         console.error('Error creating sharing link:', error);
         res.status(500).send("Failed to create sharing link");

@@ -65,13 +65,64 @@ router.post('/submit_new_column', async (req, res) => {
         const result = await apiFetch(req, url, 'POST', formData);
         
         req.session.message = "Column Added";
+        res.render('success', {orig_url: url, orig_body: formData, orig_results: result, continueUrl: '/metadata/list/'+containerId});
         // Redirect or render a success message
-        res.redirect('/metadata/list/' + containerId);  // Change this to where you want users to go after success
+        // res.redirect('/metadata/list/' + containerId);  // Change this to where you want users to go after success
     } catch (error) {
         console.error('Failed to submit new metadata column:', error);
         // Handle errors by rendering or redirecting to an error page
         res.render('error', { error: error.message });
     }
 });
+
+router.get('/properties/:containerId', async (req, res) => {
+    const containerId = req.params.containerId;
+    const url = `https://graph.microsoft.com/v1.0/storage/fileStorage/containers/${containerId}/customProperties`;
+
+    try {
+        // Fetch the container properties using the apiFetch function
+        const properties = await apiFetch(req, url);
+        // Directly send the JSON data as response
+        res.json(properties);
+    } catch (error) {
+        console.error('Failed to fetch container properties:', error);
+        // Send an error response as JSON
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+router.get('/property_add/:driveId', (req, res) => {
+    const driveId = req.params.driveId;
+    // Render the form with the driveId
+    res.render('container_properties_add', { driveId: driveId });
+});
+
+
+router.post('/property_add/:driveId', async (req, res) => {
+    const driveId = req.params.driveId;
+    const { propertyName, propertyValue, isSearchable } = req.body;
+    const url = `https://graph.microsoft.com/v1.0/storage/fileStorage/containers/${driveId}/customProperties`;
+
+    // Construct the property body
+    const body = {
+        [propertyName]: {
+            "value": propertyValue,
+            "isSearchable": isSearchable === 'true'
+        }
+    };
+
+    try {
+        // Send the request using apiFetch
+        const result = await apiFetch(req, url, 'PATCH', body);
+        // Redirect or handle the success response
+        res.render('success', {orig_url: url, orig_body: body, orig_results: result, continueUrl: `/metadata/properties/${driveId}`}); // Modify this URL as necessary
+    } catch (error) {
+        console.error('Failed to add new property:', error);
+        // Handle errors by rendering or redirecting to an error page
+        res.render('error', { error: error.message });
+    }
+});
+
 
 module.exports = router;

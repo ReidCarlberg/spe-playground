@@ -23,6 +23,11 @@ html
         a(href='https://aka.ms/start-spe') aka.ms/start-spe 
         |  to learn more
 
+    // Message display section
+    if message
+      .alert.alert-info
+        | #{message}
+
     block content
     
     // Details section with toggle button

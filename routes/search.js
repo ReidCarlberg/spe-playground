@@ -41,8 +41,6 @@ router.post('/search', async (req, res) => {
   try {
       const response = await apiFetch(req, url, 'POST', body);
       const searchResults = response.value; // Adjust based on the actual structure of the response
-      console.log(searchResults);
-      printObject(searchResults); // Assuming `printObject` is defined somewhere or replace with appropriate logic
       // Adjust rendering or JSON response based on your application needs
       res.render('search_results', { query: searchQuery, results: searchResults, orig_url: url, orig_body: body, orig_results: searchResults });
   } catch (error) {
@@ -55,14 +53,14 @@ router.get('/searchSample', async (req, res) => {
   const { searchQuery } = req.body; // Make sure this aligns with how you're sending data from the frontend
 
 
-  const url = `https://graph.microsoft.com/beta/search/query`;
+  const url = `https://graph.microsoft.com/v1.0/search/query`;
 
   const body = {
       requests: [
           {
               entityTypes: ["driveItem"],
               query: {
-                  queryString: `ContainerTypeId:${process.env.CONTAINER_TYPE_ID} AND Reid3 eq 'reid3evergreen'`
+                  queryString: `ContainerTypeId:${process.env.CONTAINER_TYPE_ID} AND Reid3OWSTEXT:'reid3evergreen'`
               },
               sharePointOneDriveOptions: {
                 includeHiddenContent: true
@@ -76,9 +74,7 @@ router.get('/searchSample', async (req, res) => {
 
       const searchResults = response.value; // Adjust based on the actual structure of the response
       console.log(searchResults);
-      printObject(searchResults); // Assuming `printObject` is defined somewhere or replace with appropriate logic
-      // Adjust rendering or JSON response based on your application needs
-      res.render('search_results', { query: searchQuery, results: searchResults,  orig_url: url, orig_body: body, orig_results: searchResults });
+       res.render('search_results', { query: searchQuery, results: searchResults,  orig_url: url, orig_body: body, orig_results: searchResults });
   } catch (error) {
       console.error('Search error:', error);
       res.status(500).send('An error occurred while processing your search query.');
@@ -96,10 +92,7 @@ router.get('/searchDrives', async (req, res) => {
           {
               entityTypes: ["drive"],
               query: {
-                  queryString: `ContainerTypeId:${process.env.CONTAINER_TYPE_ID} AND 'prod'`
-              },
-              sharePointOneDriveOptions: {
-                includeHiddenContent: true
+                  queryString: `CustomProp1OWSTEXT:'prop1'`
               }
           },
       ],
@@ -119,6 +112,25 @@ router.get('/searchDrives', async (req, res) => {
   }
 });
 
+router.get('/searchContainer', async (req, res) => {
+    const { searchQuery } = req.body; // Make sure this aligns with how you're sending data from the frontend
+  
+  
+    const url = `https://graph.microsoft.com/v1.0/drives/b!Y7r1Fy-ZAEGJWszw5VcUtf_qTdKhrp5KqXF2aMOX2zjPKVNfXF2lQJeJ5J10FtMp/root/search(q='High')`;
+  
+  
+    try {
+        const response = await apiFetch(req, url); 
+  
+        const searchResults = response.value; // Adjust based on the actual structure of the response
+        console.log(JSON.stringify(searchResults));
+
+        res.json(searchResults);
+    } catch (error) {
+        console.error('Search error:', error);
+        res.status(500).send('An error occurred while processing your search query.');
+    }
+  });
 
 
 

@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  .container.mt-4
+    h1 Add New Property to Container
+    form(action=`/metadata/property_add/${driveId}`, method="post")
+      input(type="hidden", name="driveId", value=driveId)
+
+      .form-group
+        label(for="propertyName") Property Name
+        input#propertyName.form-control(type="text", name="propertyName", required="required")
+
+      .form-group
+        label(for="propertyValue") Property Value
+        input#propertyValue.form-control(type="text", name="propertyValue", required="required")
+
+      .form-group
+        label(for="isSearchable") Is Searchable
+        select#isSearchable.form-control(name="isSearchable")
+          option(value="true") True
+          option(value="false") False
+
+      button.btn.btn-success(type="submit") Submit Property
