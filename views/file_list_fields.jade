@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  .container.mt-4
+    h1 File Fields
+    // Button to return to the files list
+    a.btn.btn-secondary.mb-3(href="/files/list/" + containerId) Return to Files List
+
+    // Display Data Elements in a Table
+    table.table.table-hover
+      thead
+        tr
+          th Key
+          th Value
+      tbody
+        each value, key in data
+          tr
+            td #{key}
+            td #{value}
+
+    // Button to Update Field
+    form(action="/files/fields/edit/" + fileId, method="get")
+      button.btn.btn-primary(type="submit") Update Field

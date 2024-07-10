@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  .container.mt-4
+    h1 Edit Field Value
+    form(action=`/files/fields/update/${fileId}` method="POST")
+      .form-group
+        label(for="fieldName") Field Name
+        select#fieldName.form-control(name="fieldName")
+          each field, index in fields
+            option(value=field.name) #{field.displayName}
+
+      .form-group
+        label(for="fieldValue") New Value
+        input#fieldValue.form-control(type="text" name="fieldValue" required=true)
+
+      button.btn.btn-primary(type="submit") Update Field

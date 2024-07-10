@@ -243,12 +243,60 @@ router.get('/fields/:fileId', async (req, res) => {
 
     try {
         const response = await apiFetch(req, url);
-        res.json({ success: true, data: response });
+        res.render('file_list_fields', { data: response, containerId: driveId, fileId: fileId });
+        //res.json({ response });
     } catch (error) {
         console.error('Error creating sharing link:', error);
         res.status(500).send("Failed to create sharing link");
     }    
 
+});
+
+router.get('/fields/edit/:fileId', async (req, res) => {
+    const fileId = req.params.fileId;
+    const containerId = req.session.driveId;
+
+    // Construct the URL for the Microsoft Graph API to fetch container columns
+    const url = `https://graph.microsoft.com/beta/storage/fileStorage/containers/${containerId}/columns`;
+
+    try {
+        // Perform the API fetch to get the container columns
+        const columnsData = await apiFetch(req, url);
+
+        // Render the edit_fields view with the fetched columns data
+        res.render('file_edit_fields', {
+            fields: columnsData.value,  // Assuming the response structure contains an array of columns in a 'value' property
+            containerId: containerId,
+            fileId: fileId
+        });
+    } catch (error) {
+        console.error('Failed to fetch container columns:', error);
+        // Render the error message on the same view or a dedicated error view
+        res.render('file_edit_fields', {
+            message: `Error fetching container columns: ${error.message}`,
+            fields: []
+        });
+    }
+});
+
+router.post('/fields/update/:fileId', async (req, res) => {
+    const { fileId } = req.params;
+    const { fieldName, fieldValue } = req.body;
+    const driveId = req.session.driveId;
+    const url = `https://graph.microsoft.com/v1.0/drives/${driveId}/items/${fileId}/listitem/fields`;
+
+    const body = {
+        [fieldName]: fieldValue
+    };
+
+    try {
+        const response = await apiFetch(req, url, 'PATCH', body);
+        res.render('success', { message: 'Update successfull foe ' + fieldName, orig_url: url, orig_body: body, orig_results: response, continueUrl: '/files/fields/' + fileId});
+        //res.redirect('/fields/edit/' + fileId + '?success=true'); // Redirect back to the form with a success message
+    } catch (error) {
+        console.error('Error updating fields:', error);
+        res.status(500).send("Failed to update fields");
+    }    
 });
 
 router.get('/fields/setreid/:fileId', async (req, res) => {

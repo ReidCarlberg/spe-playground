@@ -4,6 +4,14 @@ block content
   .container.mt-4
     h1 Search
     form(action="/search/search" method="POST")
+
+      .form-group
+        label(for="searchType") Search Type
+        select#searchType.form-control(name="searchType")
+          option(value="Drive") Drive
+          option(value="DriveItem" selected) DriveItem
+          option(value="Drive+DriveItem") Drive+DriveItem
+          
       .form-group
         label(for="searchQuery") Search Query
         input#searchQuery.form-control(type="text" name="searchQuery" required=true)

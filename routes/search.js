@@ -20,34 +20,48 @@ router.get('/', (req, res) => {
 });
 
 router.post('/search', async (req, res) => {
-  const { searchQuery } = req.body; // Make sure this aligns with how you're sending data from the frontend
-  
-  const url = `https://graph.microsoft.com/v1.0/search/query`;
+    const { searchQuery, searchType } = req.body;
 
-  const body = {
-      requests: [
-          {
-              entityTypes: ["driveItem"],
-              query: {
-                  queryString: `'${searchQuery}' AND ContainerTypeId:${process.env.CONTAINER_TYPE_ID}`
-              },
-              sharePointOneDriveOptions: {
-                includeHiddenContent: true
-              }
-          },
-      ],
-  };
+    let entityTypes = [];
+    switch (searchType) {
+        case 'Drive':
+            entityTypes = ['drive'];
+            break;
+        case 'DriveItem':
+            entityTypes = ['driveItem'];
+            break;
+        case 'Drive+DriveItem':
+            entityTypes = ['drive', 'driveItem'];
+            break;
+        default:
+            entityTypes = ['driveItem'];
+    }
 
-  try {
-      const response = await apiFetch(req, url, 'POST', body);
-      const searchResults = response.value; // Adjust based on the actual structure of the response
-      // Adjust rendering or JSON response based on your application needs
-      res.render('search_results', { query: searchQuery, results: searchResults, orig_url: url, orig_body: body, orig_results: searchResults });
-  } catch (error) {
-      console.error('Search error:', error);
-      res.status(500).send('An error occurred while processing your search query.');
-  }
+    const url = `https://graph.microsoft.com/v1.0/search/query`;
+    const body = {
+        requests: [
+            {
+                entityTypes: entityTypes,
+                query: {
+                    queryString: `'${searchQuery}' AND ContainerTypeId:${process.env.CONTAINER_TYPE_ID}`
+                },
+                sharePointOneDriveOptions: {
+                  includeHiddenContent: true
+                }
+            },
+        ],
+    };
+
+    try {
+        const response = await apiFetch(req, url, 'POST', body);
+        const searchResults = response.value;
+        res.render('search_results', { query: searchQuery, results: searchResults, orig_url: url, orig_body: body, orig_results: searchResults });
+    } catch (error) {
+        console.error('Search error:', error);
+        res.status(500).send('An error occurred while processing your search query.');
+    }
 });
+
 
 router.get('/searchSample', async (req, res) => {
   const { searchQuery } = req.body; // Make sure this aligns with how you're sending data from the frontend
@@ -93,7 +107,7 @@ router.get('/searchDrives', async (req, res) => {
           {
               entityTypes: ["drive"],
               query: {
-                  queryString: `CustomProp1:'prop1'`
+                  queryString: 'prop1'
               }
           },
       ],
