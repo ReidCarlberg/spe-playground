@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  .container.mt-4
+    h1.mb-4 File Upload Session (for larger files)
+    form(action="/files/create-upload-session", method="post", enctype="multipart/form-data")
+      .form-group
+        label(for="file") Choose file to upload
+        input.form-control(type="file", name="file", id="file")
+      button.btn.btn-primary(type="submit") Upload File

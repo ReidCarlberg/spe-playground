@@ -3,6 +3,7 @@ var router = express.Router();
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+const fs = require('fs');
 
 async function apiFetch(req, url, method = 'GET', body = null) {
     console.log(url);
@@ -44,14 +45,14 @@ router.get('/list/:containerId/:folderId?', async (req, res) => {
     try {
         const data = await apiFetch(req, url);
         req.session.driveId=containerId;
-        res.render('files_list', { items: data.value, username: req.session.username, orig_url: url, orig_results: data.value });
+        res.render('files_list', { items: data.value, orig_url: url, orig_results: data.value });
     } catch (error) {
         res.status(500).send('Error fetching files');
     }
 });
 
 router.get('/upload', (req, res) => {
-    res.render('file_upload', { title: 'Upload File', username: req.session.username });
+    res.render('file_upload', { title: 'Upload File' });
 });
 
 router.post('/upload-file', upload.single('file'), async (req, res) => {
@@ -75,6 +76,72 @@ router.post('/upload-file', upload.single('file'), async (req, res) => {
 
     } catch (error) {
         res.status(500).send('Error uploading file');
+    }
+});
+
+router.get('/upload-session', (req, res) => {
+    res.render('file_upload_session', { title: 'Upload File' });
+});
+
+async function uploadFileInChunks(fileBuffer, uploadUrl, fileSize) {
+    const chunkSize = 1024 * 1024 * 10; // 10 MB; adjust this based on your needs
+    let start = 0;
+
+    while (start < fileSize) {
+        const end = Math.min(start + chunkSize, fileSize) - 1;
+        const contentLength = end - start + 1;
+        const chunk = fileBuffer.slice(start, end + 1);  // Slice the buffer to get the chunk
+
+        const headers = {
+            'Content-Length': contentLength,
+            'Content-Range': `bytes ${start}-${end}/${fileSize}`
+        };
+
+        const response = await fetch(uploadUrl, {
+            method: 'PUT',
+            headers: headers,
+            body: chunk  // Use the buffer chunk directly
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server responded with ${response.status}: ${await response.text()}`);
+        }
+
+        start += contentLength;
+    }
+
+    console.log('Upload completed successfully.');
+}
+
+router.post('/create-upload-session', upload.single('file'), async (req, res) => {
+    if (!req.file) {
+        return res.status(400).send("No file uploaded.");
+    }
+
+    const driveId = req.session.driveId;
+    const fileName = req.file.originalname;
+    const fileSize = req.file.size;
+    const fileBuffer = req.file.buffer;  // The buffer containing the file data
+
+    const url = `https://graph.microsoft.com/v1.0/drives/${driveId}/items/root:/${fileName}:/createUploadSession`;
+    const body = {
+        "item": {
+            "@microsoft.graph.conflictBehavior": "rename",
+            "name": fileName
+        }
+    };
+
+    try {
+        const sessionResponse = await apiFetch(req, url, 'POST', body);
+        if (sessionResponse.uploadUrl) {
+            await uploadFileInChunks(fileBuffer, sessionResponse.uploadUrl, fileSize);
+            res.send('File uploaded successfully');
+        } else {
+            throw new Error('Upload URL not found');
+        }
+    } catch (error) {
+        console.error('Failed to upload file:', error);
+        res.status(500).send("Failed to upload file");
     }
 });
 

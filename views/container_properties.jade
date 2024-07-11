@@ -1,0 +1,33 @@
+extends layout
+
+block content
+  .container.mt-4
+    h1 Container Properties
+    h4 #{containerId}
+
+        // Navigation Button
+    a.btn.btn-primary(href="/files/list/" + containerId) List Files
+
+    // Table to Display Data
+    table.table.table-hover
+      thead
+        tr
+          th Property
+          th Value
+          th Searchable
+      tbody
+        each key,value in data
+            if value !== '@odata.context'
+                tr
+                    td #{value}
+                    td #{key['value']}
+                    td #{key['isSearchable']}
+
+
+
+        
+
+              
+
+    // Navigation Button
+    a.btn.btn-primary(href="/containers/list") List Containers

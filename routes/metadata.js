@@ -82,7 +82,8 @@ router.get('/properties/:containerId', async (req, res) => {
         // Fetch the container properties using the apiFetch function
         const properties = await apiFetch(req, url);
         // Directly send the JSON data as response
-        res.json(properties);
+        //res.json(properties);
+        res.render('container_properties', { data: properties, containerId: containerId, orig_url: url, orig_results: properties });
     } catch (error) {
         console.error('Failed to fetch container properties:', error);
         // Send an error response as JSON

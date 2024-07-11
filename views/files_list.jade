@@ -46,14 +46,15 @@ block content
                 a(href=`/files/create-link/${item.id}` class="btn btn-info") Link
                 | &nbsp;
                 a(href=`/files/fields/${item.id}` class="btn btn-info") fields
-                | &nbsp;
-                a(href=`/files/fields/setreid/${item.id}` class="btn btn-info") setReid
 
     else
       .alert.alert-info.mb-3 No items found.
 
   p.mb-3
     a(href=`/files/upload` class="btn btn-success") Upload
+
+  p.mb-3
+    a(href=`/files/upload-session` class="btn btn-success") Upload with Create Upload Session
 
 
 
