@@ -55,7 +55,7 @@ router.post('/search', async (req, res) => {
     try {
         const response = await apiFetch(req, url, 'POST', body);
         const searchResults = response.value;
-        res.render('search_results', { query: searchQuery, results: searchResults, orig_url: url, orig_body: body, orig_results: searchResults });
+        res.render('search_results', { query: searchQuery, results: searchResults, orig_url: url, orig_body: body, orig_results: searchResults, orig_req_id: req.session.ORIG_REQ_ID });
     } catch (error) {
         console.error('Search error:', error);
         res.status(500).send('An error occurred while processing your search query.');
@@ -107,7 +107,10 @@ router.get('/searchDrives', async (req, res) => {
           {
               entityTypes: ["drive"],
               query: {
-                  queryString: 'prop1'
+                  queryString: "CustomProp1OWSTEXT:prop1"
+              },
+              "sharePointOneDriveOptions": {
+                "includeHiddenContent": true
               }
           },
       ],

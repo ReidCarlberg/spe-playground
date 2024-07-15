@@ -31,6 +31,7 @@ app.use(session({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // Authentication Middleware
 function authenticate(req, res, next) {
   if (req.session.isAuthenticated) {

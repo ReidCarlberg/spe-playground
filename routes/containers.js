@@ -1,31 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-// Simplified API fetch utility function
-async function apiFetch(req, url, method = 'GET', body = null) {
-    const headers = {
-        'Authorization': `Bearer ${req.session.accessToken}`,
-        'Content-Type': 'application/json',
-    };
-
-    if (body && method !== 'GET') {
-        body = JSON.stringify(body);
-    } else {
-        body = undefined;
-    }
-
-    try {
-        const response = await fetch(url, { method, headers, body });
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`API call failed with status: ${response.status}, status text: ${response.statusText}, error: ${errorText}`);
-        }
-        return response.status === 204 ? {} : await response.json(); // Handle no-content response
-    } catch (error) {
-        console.error('API Fetch error:', error);
-        throw error; // Rethrow to handle in the calling function
-    }
-}
+const apiFetch = require('./common');  
 
 function printObject(obj, indent = '') {
   for (const [key, value] of Object.entries(obj)) {

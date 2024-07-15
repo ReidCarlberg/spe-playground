@@ -5,34 +5,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const fs = require('fs');
 
-async function apiFetch(req, url, method = 'GET', body = null) {
-    console.log(url);
-    const headers = {
-        'Authorization': `Bearer ${req.session.accessToken}`,
-    };
-
-    if (method === 'PUT' && body instanceof Buffer) {
-        headers['Content-Type'] = 'application/octet-stream';
-    } else if (method !== 'GET') {
-        headers['Content-Type'] = 'application/json';
-        body = JSON.stringify(body);
-        console.log(body);
-    }
-
-    try {
-        const options = { method, headers };
-        if (body !== undefined && method !== 'GET') options.body = body;
-        const response = await fetch(url, options);
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`API call failed with status: ${response.status}, status text: ${response.statusText}, error: ${errorText}`);
-        }
-        return response.status === 204 ? {} : await response.json();
-    } catch (error) {
-        console.error('API Fetch error:', error);
-        throw error;
-    }
-}
+const apiFetch = require('./common');  
 
 router.get('/', (req, res) => {
     res.redirect('/containers/');
@@ -135,7 +108,7 @@ router.post('/create-upload-session', upload.single('file'), async (req, res) =>
         const sessionResponse = await apiFetch(req, url, 'POST', body);
         if (sessionResponse.uploadUrl) {
             await uploadFileInChunks(fileBuffer, sessionResponse.uploadUrl, fileSize);
-            res.send('File uploaded successfully');
+            res.render('success', {message: 'File Uploaded Successfully', orig_url: url, orig_body: body, orig_results: sessionResponse, continueUrl: '/files/list/' + driveId, orig_req_id: req.session.ORIG_REQ_ID});
         } else {
             throw new Error('Upload URL not found');
         }

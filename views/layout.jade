@@ -44,6 +44,9 @@ html
         if orig_results 
           p.mb-2.font-weight-bold Results 
           pre= JSON.stringify(orig_results, null, 2)
+        if orig_req_id 
+          p.mb-2.font-weight-bold Request ID 
+          pre #{orig_req_id}
     else
       button.btn.btn-secondary.disabled.fixed-bottom(type='button') No Details Available
 
