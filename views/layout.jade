@@ -28,7 +28,8 @@ html
       .alert.alert-info
         | #{message}
 
-    block content
+    .container.mt-4
+      block content
     
     // Details section with toggle button
     if orig_url || orig_body || orig_results
