@@ -16,7 +16,7 @@ block content
         label Search Mode
         .form-check
           input#searchTerm.form-check-input(type="radio" name="searchMode" value="term" checked)
-          label.form-check-label(for="searchTerm") Search Terms with Container Type Id
+          label.form-check-label(for="searchTerm") Search Terms, Automatically Append Container Type Id
         .form-check
           input#exactMatch.form-check-input(type="radio" name="searchMode" value="exact" )
           label.form-check-label(for="exactMatch") Exact Match
@@ -25,7 +25,8 @@ block content
         label(for="searchQuery") Search Query
         input#searchQuery.form-control(type="text" name="searchQuery" required=true)
 
-      button.btn.btn-primary(type="submit") Search
+      p 
+        button.btn.btn-primary(type="submit") Search
 
       p.h3 Notes on searching 
 

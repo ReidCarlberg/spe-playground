@@ -110,7 +110,8 @@ router.post('/grant-container', async (req, res) => {
 
   try {
     const response = await apiFetch(req, url, 'POST', body);
-    res.json({ success: true, permissions: response, message: "Permissions updated successfully." });
+    res.render('success', { message: "Permission added successfully.", orig_url: url, orig_body: body, orig_results: response, continueUrl: '/containers/list', orig_req_id: req.session.ORIG_REQ_ID })
+    //res.json({ success: true, permissions: response, message: "Permissions updated successfully." });
   } catch (error) {
     console.error('Error updating permissions:', error);
     res.status(500).send("Failed to update permissions");
