@@ -2,14 +2,15 @@ extends layout
 
 block content
   .container.mt-4
-    h1.mb-4= title
-    p.mb-2 Welcome to #{title}
+    p.h1= title
+
     p.mb-2 
-      a(href=`/signin` class="btn btn-success") Sign In
+      a(href=`/signin` class="btn btn-success") Sign In (Delegated)
     p.mb-2 
       a(href=`/app-only` class="btn btn-success") App Only 
 
+    p.h3 First Time Users Start Here
     p.mb-2 
-      a(href=`/sharepoint/` class="btn btn-success") SharePoint
+      a(href=`/sharepoint/` class="btn btn-success") SharePoint Only
 
 

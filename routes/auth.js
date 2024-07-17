@@ -90,7 +90,7 @@ router.get('/app-only', (req, res) => {
     req.session.isAuthenticated=true;
     req.session.username="App Only";
     //this is to a particular drive that should be accessible
-    res.redirect("/apponly/");
+    res.redirect("/containers/");
   }).catch((error) => console.log(JSON.stringify(error)));
 });
 
@@ -99,7 +99,7 @@ router.get('/app-only', (req, res) => {
 router.get('/signout', async (req, res) => {
   try {
     // https://graph.microsoft.com/v1.0/me/revokeSignInSessions
-    await apiFetch(req, "https://graph.microsoft.com/v1.0/me/revokeSignInSessions", "POST");
+    // await apiFetch(req, "https://graph.microsoft.com/v1.0/me/revokeSignInSessions", "POST");
 
     // Clear the token cache to sign the user out
     req.session.accessToken=null;

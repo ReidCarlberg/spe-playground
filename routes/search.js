@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/search', async (req, res) => {
-    const { searchQuery, searchType } = req.body;
+    const { searchQuery, searchType, searchMode } = req.body;  // Include searchMode in the destructuring
 
     let entityTypes = [];
     switch (searchType) {
@@ -34,7 +34,17 @@ router.post('/search', async (req, res) => {
             entityTypes = ['drive', 'driveItem'];
             break;
         default:
-            entityTypes = ['driveItem'];
+            entityTypes = ['driveItem'];  // Default to 'driveItem'
+    }
+
+    // Determine the appropriate queryString based on searchMode
+    let queryString;
+    if (searchMode === 'exact') {
+        // For exact matches, use the query as-is, without quotes
+        queryString = `${searchQuery}`;
+    } else {
+        // For search terms, enclose the searchQuery in single quotes for fuzzy/term search
+        queryString = `'${searchQuery}' AND ContainerTypeId:${process.env.CONTAINER_TYPE_ID}`;
     }
 
     const url = `https://graph.microsoft.com/v1.0/search/query`;
@@ -43,7 +53,7 @@ router.post('/search', async (req, res) => {
             {
                 entityTypes: entityTypes,
                 query: {
-                    queryString: `'${searchQuery}' AND ContainerTypeId:${process.env.CONTAINER_TYPE_ID}`
+                    queryString: queryString
                 },
                 sharePointOneDriveOptions: {
                   includeHiddenContent: true
@@ -54,13 +64,22 @@ router.post('/search', async (req, res) => {
 
     try {
         const response = await apiFetch(req, url, 'POST', body);
-        const searchResults = response.value;
-        res.render('search_results', { query: searchQuery, results: searchResults, orig_url: url, orig_body: body, orig_results: searchResults, orig_req_id: req.session.ORIG_REQ_ID });
+        const searchResults = response.value; // Assuming the response structure includes a 'value' property
+        res.render('search_results', {
+            searchType: searchType,
+            query: searchQuery,
+            results: searchResults,
+            orig_url: url,
+            orig_body: body,
+            orig_results: searchResults,
+            orig_req_id: req.session.ORIG_REQ_ID,
+        });
     } catch (error) {
         console.error('Search error:', error);
         res.status(500).send('An error occurred while processing your search query.');
     }
 });
+
 
 
 router.get('/searchSample', async (req, res) => {

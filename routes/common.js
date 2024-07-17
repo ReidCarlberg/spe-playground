@@ -32,17 +32,19 @@ async function apiFetch(req, url, method = 'GET', body = null) {
       if (requestId) {
           req.session.ORIG_REQ_ID = requestId; // Store the request ID in the session
           //response.locals.orig_req_id = requestId;
-          console.log('Stored request-id in session:', requestId);
+          //console.log('Stored request-id in session:', requestId);
       }
 
-      console.log(response);
+      //console.log(response);
       // Log response headers if they exist
+      /*
       if (response.headers && response.headers.forEach) {
           console.log('Response Headers:');
           response.headers.forEach((value, key) => {
               console.log(`${key}: ${value}`);
           });
       }
+        */
 
       // Handle no-content response
       return response.status === 204 ? {} : await response.json();

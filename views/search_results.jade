@@ -3,6 +3,9 @@ extends layout
 block content
   .container.mt-4
     h1 Search Results
+
+    p Search Type: #{searchType}
+
     if results && results.length > 0
       each searchResult in results
         if searchResult.searchTerms && searchResult.searchTerms.length > 0
@@ -15,8 +18,12 @@ block content
                 each hit in hitsContainer.hits
                   .list-group-item
                     h5.list-group-item-heading 
-                      a(href='/files/preview/' + hit.resource.parentReference.driveId + '/' + hit.resource.id)= hit.resource.name
-                    p.list-group-item-text Summary: #{hit.summary}
+                      if searchType === 'DriveItem'
+                        a(href='/files/preview/' + hit.resource.parentReference.driveId + '/' + hit.resource.id)= hit.resource.name
+                        p.list-group-item-text Summary: #{hit.summary}
+                      else if searchType === 'Drive'
+                        a(href='/files/list/' + hit.resource.id )= hit.summary
+                    
             else
               p No hits found.
         else

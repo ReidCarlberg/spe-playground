@@ -13,6 +13,7 @@
 - You must have SharePoint Embedded completely configured in order to use this.  Learn more at https://learn.microsoft.com/en-us/training/modules/sharepoint-embedded-setup/5-exercise-setup-configure-sharepoint-embedded.
 - You can configure via PowerShell or VS Code Plugin, but the settings must be in .env file.
 - Works with both trial container types and standard container types.
+- Official Microsoft Graph API documentation is here - https://learn.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0. 
 
 ### Getting Started: 
 

@@ -4,30 +4,31 @@ block content
   .container.mt-4
     h1 Search
     form(action="/search/search" method="POST")
-
       .form-group
         label(for="searchType") Search Type
         select#searchType.form-control(name="searchType")
           option(value="Drive") Drive
           option(value="DriveItem" selected) DriveItem
-          option(value="Drive+DriveItem") Drive+DriveItem
-          
+          //option(value="Drive+DriveItem") Drive+DriveItem
+
+      // Add radio buttons for search mode selection
+      .form-group
+        label Search Mode
+        .form-check
+          input#searchTerm.form-check-input(type="radio" name="searchMode" value="term" checked)
+          label.form-check-label(for="searchTerm") Search Terms with Container Type Id
+        .form-check
+          input#exactMatch.form-check-input(type="radio" name="searchMode" value="exact" )
+          label.form-check-label(for="exactMatch") Exact Match
+
       .form-group
         label(for="searchQuery") Search Query
         input#searchQuery.form-control(type="text" name="searchQuery" required=true)
+
       button.btn.btn-primary(type="submit") Search
 
-    p.mb-3 
-      &nbsp;
+      p.h3 Notes on searching 
 
-    p.mb-3
-      a(href=`/search/searchSample` class="btn btn-primary") Search Sample (Reid3:reid3evergreen)
-      &nbsp;
+      p To search for a file using metadata, use "exact" and enter "FieldNameOWSTEXT:'fieldvalue'" 
 
-    p.mb-3
-      a(href=`/search/searchDrives` class="btn btn-primary") Search Drives (prod)
-      &nbsp;
 
-    p.mb-3
-      a(href=`/search/searchContainer` class="btn btn-primary") Search Container (prod)
-      &nbsp;

@@ -26,12 +26,9 @@ block content
               td= item.createdBy.user.displayName
               td= item.createdDateTime
               td
-                a(href='/files/delete/' + item.id onclick="return confirm('Are you sure?');" class="btn btn-danger") Delete
-                | &nbsp;
                 - var isOfficeFormat = /\.(docx|xlsx|pptx)$/.test(item.name);
                 if isOfficeFormat
                   a(href=`/files/edit/${item.id}`, target="_blank" class="btn btn-primary") Edit
-                  
                 else if item['@microsoft.graph.downloadUrl']
                   a(href=`/files/preview/${item.id}`, target="_blank" class="btn btn-primary") Download
                 | &nbsp;
@@ -45,7 +42,10 @@ block content
                 | &nbsp;
                 a(href=`/files/create-link/${item.id}` class="btn btn-info") Link
                 | &nbsp;
-                a(href=`/files/fields/${item.id}` class="btn btn-info") fields
+                a(href=`/files/fields/${item.id}` class="btn btn-info") Fields
+                | &nbsp;
+                a(href='/files/delete/' + item.id onclick="return confirm('Are you sure?');" class="btn btn-danger") Delete
+
 
     else
       .alert.alert-info.mb-3 No items found.
