@@ -16,10 +16,10 @@ block content
         label Search Mode
         .form-check
           input#searchTerm.form-check-input(type="radio" name="searchMode" value="term" checked)
-          label.form-check-label(for="searchTerm") Search Terms, Automatically Append Container Type Id
+          label.form-check-label(for="searchTerm") Search terms and automatically append container type Id
         .form-check
           input#exactMatch.form-check-input(type="radio" name="searchMode" value="exact" )
-          label.form-check-label(for="exactMatch") Exact Match
+          label.form-check-label(for="exactMatch") Exact - search using exactly what you enter and nothing else
 
       .form-group
         label(for="searchQuery") Search Query
@@ -31,5 +31,6 @@ block content
       p.h3 Notes on searching 
 
       p To search for a file using metadata, use "exact" and enter "FieldNameOWSTEXT:'fieldvalue'" 
+      P To use a wildcard in metadata, use "exact" and enter "FieldNameOWSTEXT:'field*'"
 
 

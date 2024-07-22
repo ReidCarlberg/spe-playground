@@ -118,6 +118,40 @@ router.post('/create-upload-session', upload.single('file'), async (req, res) =>
     }
 });
 
+
+router.get('/create-new', async (req, res) => {
+    res.render('file_create_new');
+});
+
+router.post('/create-new', async (req, res) => {
+    if (!req.body.fileName) {
+        return res.status(400).send('File name is required.');
+    }
+
+    const fileName = req.body.fileName;
+    let folderId = req.session.folderId && req.session.folderId.trim() !== "" ? req.session.folderId : 'root';
+
+    // Construct the URL for creating a new file in the specified folder
+    const url = `https://graph.microsoft.com/v1.0/drives/${req.session.driveId}/items/${folderId}:/${encodeURIComponent(fileName)}:/content`;
+
+    try {
+        // Use apiFetch to create the file with null content (empty file)
+        const result = await apiFetch(req, url, 'PUT', Buffer.from(''));
+        
+        // Using result.webUrl as the continueUrl
+        res.render('success', {
+            message: 'File created successfully',
+            continueUrl: result.webUrl,  // This URL is the link to the created file
+            orig_url: url,
+            orig_results: result
+        });
+    } catch (error) {
+        console.error('Error creating file:', error);
+        res.status(500).send('Error creating file');
+    }
+});
+
+
 router.get('/preview/:itemId', async (req, res) => {
     const url = `https://graph.microsoft.com/v1.0/drives/${req.session.driveId}/items/${req.params.itemId}/preview`;
 

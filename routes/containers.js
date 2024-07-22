@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 
 // List Containers
 router.get('/list', async (req, res) => {
-  const url = `https://graph.microsoft.com/beta/storage/fileStorage/containers?$filter=containerTypeId eq ${process.env.CONTAINER_TYPE_ID}`;
+  const url = `https://graph.microsoft.com/v1.0/storage/fileStorage/containers?$select=id,displayName,description,containerTypeId,createdDateTime&$filter=containerTypeId eq ${process.env.CONTAINER_TYPE_ID}`;
   try {
     const userData = await apiFetch(req, url);
     res.render('containers_list', { containers: userData.value, orig_url: url, orig_results: userData.value });

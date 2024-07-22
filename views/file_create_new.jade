@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  .container.mt-4
+    h1 Create New File
+    form(action="/files/create-new" method="post")
+      .form-group
+        label(for="fileName") File Name (end in .docx for a Word, .xlsx for Excel, .pptx for PowerPoint.)
+        input#fileName.form-control(type="text" name="fileName" required=true placeholder="Enter file name")
+
+      button.btn.btn-primary(type="submit") Create and edit file
