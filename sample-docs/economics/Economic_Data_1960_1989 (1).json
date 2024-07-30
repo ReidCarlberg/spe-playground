@@ -1,0 +1,202 @@
+{
+    "1960": {
+        "DJIA": 615.89,
+        "S&P 500": 58.03,
+        "Ford Stock Price": 5.37,
+        "IBM Stock Price": 578.5
+    },
+    "1961": {
+        "DJIA": 731.14,
+        "S&P 500": 71.55,
+        "Ford Stock Price": 5.87,
+        "IBM Stock Price": 592.0
+    },
+    "1962": {
+        "DJIA": 652.1,
+        "S&P 500": 63.1,
+        "Ford Stock Price": 6.25,
+        "IBM Stock Price": 572.0
+    },
+    "1963": {
+        "DJIA": 762.95,
+        "S&P 500": 75.02,
+        "Ford Stock Price": 6.75,
+        "IBM Stock Price": 587.0
+    },
+    "1964": {
+        "DJIA": 874.13,
+        "S&P 500": 84.75,
+        "Ford Stock Price": 6.98,
+        "IBM Stock Price": 598.5
+    },
+    "1965": {
+        "DJIA": 969.26,
+        "S&P 500": 92.43,
+        "Ford Stock Price": 9.05,
+        "IBM Stock Price": 617.62
+    },
+    "1966": {
+        "DJIA": 785.69,
+        "S&P 500": 80.33,
+        "Ford Stock Price": 10.14,
+        "IBM Stock Price": 547.88
+    },
+    "1967": {
+        "DJIA": 905.11,
+        "S&P 500": 96.47,
+        "Ford Stock Price": 11.77,
+        "IBM Stock Price": 635.5
+    },
+    "1968": {
+        "DJIA": 943.75,
+        "S&P 500": 103.86,
+        "Ford Stock Price": 15.28,
+        "IBM Stock Price": 719.5
+    },
+    "1969": {
+        "DJIA": 800.36,
+        "S&P 500": 92.06,
+        "Ford Stock Price": 17.62,
+        "IBM Stock Price": 699.37
+    },
+    "1970": {
+        "DJIA": 838.92,
+        "S&P 500": 92.15,
+        "Mortgage Rate": 7.54,
+        "Ford Stock Price": 22.37,
+        "IBM Stock Price": 676.62
+    },
+    "1971": {
+        "DJIA": 890.2,
+        "S&P 500": 102.09,
+        "Mortgage Rate": 7.54,
+        "Ford Stock Price": 20.22,
+        "IBM Stock Price": 434.0
+    },
+    "1972": {
+        "DJIA": 1020.02,
+        "S&P 500": 118.05,
+        "Mortgage Rate": 7.38,
+        "Ford Stock Price": 18.78,
+        "IBM Stock Price": 367.5
+    },
+    "1973": {
+        "DJIA": 850.86,
+        "S&P 500": 97.55,
+        "Mortgage Rate": 8.04,
+        "Ford Stock Price": 16.13,
+        "IBM Stock Price": 400.38
+    },
+    "1974": {
+        "DJIA": 616.24,
+        "S&P 500": 68.56,
+        "Mortgage Rate": 9.19,
+        "Ford Stock Price": 12.37,
+        "IBM Stock Price": 266.0
+    },
+    "1975": {
+        "DJIA": 852.41,
+        "S&P 500": 90.19,
+        "Mortgage Rate": 9.05,
+        "Ford Stock Price": 10.25,
+        "IBM Stock Price": 261.5
+    },
+    "1976": {
+        "DJIA": 1004.65,
+        "S&P 500": 107.46,
+        "Mortgage Rate": 8.87,
+        "Ford Stock Price": 9.25,
+        "IBM Stock Price": 295.12
+    },
+    "1977": {
+        "DJIA": 831.17,
+        "S&P 500": 95.1,
+        "Mortgage Rate": 8.85,
+        "Ford Stock Price": 8.87,
+        "IBM Stock Price": 244.87
+    },
+    "1978": {
+        "DJIA": 805.01,
+        "S&P 500": 96.11,
+        "Mortgage Rate": 9.64,
+        "Ford Stock Price": 10.67,
+        "IBM Stock Price": 261.25
+    },
+    "1979": {
+        "DJIA": 838.74,
+        "S&P 500": 107.94,
+        "Mortgage Rate": 11.2,
+        "Ford Stock Price": 11.77,
+        "IBM Stock Price": 280.87
+    },
+    "1980": {
+        "DJIA": 963.99,
+        "S&P 500": 135.76,
+        "Mortgage Rate": 13.74,
+        "Ford Stock Price": 15.18,
+        "IBM Stock Price": 368.12
+    },
+    "1981": {
+        "DJIA": 875.0,
+        "S&P 500": 122.55,
+        "Mortgage Rate": 16.63,
+        "Ford Stock Price": 18.37,
+        "IBM Stock Price": 380.0
+    },
+    "1982": {
+        "DJIA": 1046.54,
+        "S&P 500": 140.64,
+        "Mortgage Rate": 16.04,
+        "Ford Stock Price": 20.12,
+        "IBM Stock Price": 296.25
+    },
+    "1983": {
+        "DJIA": 1258.64,
+        "S&P 500": 164.93,
+        "Mortgage Rate": 13.24,
+        "Ford Stock Price": 18.91,
+        "IBM Stock Price": 162.12
+    },
+    "1984": {
+        "DJIA": 1211.57,
+        "S&P 500": 167.24,
+        "Mortgage Rate": 13.88,
+        "Ford Stock Price": 16.78,
+        "IBM Stock Price": 168.37
+    },
+    "1985": {
+        "DJIA": 1546.67,
+        "S&P 500": 211.28,
+        "Mortgage Rate": 12.43,
+        "Ford Stock Price": 14.87,
+        "IBM Stock Price": 166.25
+    },
+    "1986": {
+        "DJIA": 1895.95,
+        "S&P 500": 242.17,
+        "Mortgage Rate": 10.19,
+        "Ford Stock Price": 11.5,
+        "IBM Stock Price": 155.5
+    },
+    "1987": {
+        "DJIA": 1938.83,
+        "S&P 500": 247.08,
+        "Mortgage Rate": 10.61,
+        "Ford Stock Price": 12.75,
+        "IBM Stock Price": 170.5
+    },
+    "1988": {
+        "DJIA": 2168.57,
+        "S&P 500": 277.72,
+        "Mortgage Rate": 10.32,
+        "Ford Stock Price": 14.87,
+        "IBM Stock Price": 120.87
+    },
+    "1989": {
+        "DJIA": 2753.2,
+        "S&P 500": 353.4,
+        "Mortgage Rate": 9.84,
+        "Ford Stock Price": 17.5,
+        "IBM Stock Price": 107.87
+    }
+}
