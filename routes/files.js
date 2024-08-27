@@ -167,6 +167,33 @@ router.get('/preview/:itemId', async (req, res) => {
     }
 });
 
+router.get('/versions/:itemId', async (req, res) => {
+    const url = `https://graph.microsoft.com/v1.0/drives/${req.session.driveId}/items/${req.params.itemId}/versions`;
+
+    try {
+        const data = await apiFetch(req, url);
+        res.json(data);
+    } catch (error) {
+        res.status(500).send('Failed to retrieve preview URL');
+    }
+});
+
+router.get('/pdf/:itemId', async (req, res) => {
+    const url = `https://graph.microsoft.com/v1.0/drives/${req.session.driveId}/items/${req.params.itemId}/content?format=pdf`;
+
+    try {
+        const pdfBuffer = await apiFetch(req, url); // Get the PDF content as a Buffer
+        res.contentType('application/pdf');
+        res.setHeader('Content-Disposition', 'inline; filename="document.pdf"');
+        res.send(pdfBuffer); // Send the Buffer directly to the client
+    } catch (error) {
+        console.log('Error fetching PDF content:', error);
+        res.status(500).send('Failed to retrieve PDF content');
+    }
+});
+
+
+
 router.get('/preview/:driveId/:itemId', async (req, res) => {
     const url = `https://graph.microsoft.com/v1.0/drives/${req.params.driveId}/items/${req.params.itemId}/preview`;
 

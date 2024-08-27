@@ -57,13 +57,15 @@ router.post('/search', async (req, res) => {
                 },
                 sharePointOneDriveOptions: {
                   includeHiddenContent: true
-                }
+                },
+                //fields: ["id", "name", "parentReference", "file", "folder", "webUrl", "createdDateTime", "lastModifiedDateTime", "size", "fileSystemInfo", "createdBy", "lastModifiedBy", "fileSystemInfo", "fileSystemInfo"]   
             },
         ],
     };
 
     try {
         const response = await apiFetch(req, url, 'POST', body);
+        console.log(JSON.stringify(response));
         const searchResults = response.value; // Assuming the response structure includes a 'value' property
         res.render('search_results', {
             searchType: searchType,

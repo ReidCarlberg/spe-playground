@@ -28,6 +28,12 @@ async function apiFetch(req, url, method = 'GET', body = null) {
           throw new Error(`API call failed with status: ${response.status}, status text: ${response.statusText}, error: ${errorText}`);
       }
 
+      console.log('Response Status:', response.status);
+
+      console.log('Response Headers:', response.headers);
+
+      //console.log('Response Body:', response.body);
+
       const requestId = response.headers.get('request-id');
       if (requestId) {
           req.session.ORIG_REQ_ID = requestId; // Store the request ID in the session
@@ -45,7 +51,15 @@ async function apiFetch(req, url, method = 'GET', body = null) {
           });
       }
         */
-
+      if (response.headers.get('content-type').includes('application/pdf')) {
+        console.log('Response is a PDF');
+        const arrayBuffer = await response.arrayBuffer(); // Get the response as an ArrayBuffer
+        return Buffer.from(arrayBuffer); // Convert ArrayBuffer to Node.js Buffer
+      } else if (response.status === 204) {
+        return {};
+      } else {
+        return await response.json();
+      }
       // Handle no-content response
       return response.status === 204 ? {} : await response.json();
   } catch (error) {
