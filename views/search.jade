@@ -18,19 +18,32 @@ block content
           input#searchTerm.form-check-input(type="radio" name="searchMode" value="term" checked)
           label.form-check-label(for="searchTerm") Search terms and automatically append container type Id
         .form-check
-          input#exactMatch.form-check-input(type="radio" name="searchMode" value="exact" )
+          input#exactMatch.form-check-input(type="radio" name="searchMode" value="exact")
           label.form-check-label(for="exactMatch") Exact - search using exactly what you enter and nothing else
 
       .form-group
         label(for="searchQuery") Search Query
         input#searchQuery.form-control(type="text" name="searchQuery" required=true)
 
+      // Add a new form-group for "fields" option
+      .form-group
+        label(for="fields") Fields (optional)
+        input#fields.form-control(type="text" name="fields" placeholder="Enter fields to include, comma-separated")
+
       p 
         button.btn.btn-primary(type="submit") Search
 
       p.h3 Notes on searching 
 
-      p To search for a file using metadata, use "exact" and enter FieldNameOWSTEXT:"fieldvalue" (note the double quotes around fieldvalue)
-      P To use a wildcard in metadata, use "exact" and enter "FieldNameOWSTEXT:"field*"
+      p To search for a file using metadata on <strong>drive items</strong>, use "exact" and enter FieldNameOWSTEXT:"fieldvalue" (note the double quotes around fieldvalue)
+      p To use a wildcard in metadata, use "exact" and enter "FieldNameOWSTEXT:field*"
+      p Note you can use this same pattern for container properties, just change entity to <strong>drive</strong>.
+      p Also when searching drives (not drive items) you can simply enter the container property value using a regular query if that is sufficiently unique for you.
 
+      p.h3 Notes on fields 
 
+      p Fields is an optional input.  If you include fields, and they match a file's metadata field, it will be included in the query results (resource > listItem > fields).  To match a metadata field, you must include the correct suffix.  E.g., MyMetadataFieldOWSTEXT.
+      p Note that you must include all fields if you include any fields.
+      p Example:
+      pre MyMetadataFieldOWSTEXT,id,name,parentReference,file,folder,webUrl,createdDateTime,lastModifiedDateTime,size,fileSystemInfo,createdBy,lastModifiedBy,fileSystemInfo,fileSystemInfo
+      

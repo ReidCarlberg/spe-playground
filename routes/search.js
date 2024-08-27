@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/search', async (req, res) => {
-    const { searchQuery, searchType, searchMode } = req.body;  // Include searchMode in the destructuring
+    const { searchQuery, searchType, searchMode, fields } = req.body;  // Include 'fields' in destructuring
 
     let entityTypes = [];
     switch (searchType) {
@@ -56,12 +56,17 @@ router.post('/search', async (req, res) => {
                     queryString: queryString
                 },
                 sharePointOneDriveOptions: {
-                  includeHiddenContent: true
-                },
-                //fields: ["id", "name", "parentReference", "file", "folder", "webUrl", "createdDateTime", "lastModifiedDateTime", "size", "fileSystemInfo", "createdBy", "lastModifiedBy", "fileSystemInfo", "fileSystemInfo"]   
+                    includeHiddenContent: true
+                }
             },
         ],
     };
+
+    // Conditionally include the 'fields' array in the body if it's provided
+    if (fields && fields.trim() !== '') {
+        const fieldsArray = fields.split(',').map(field => field.trim());
+        body.requests[0].fields = fieldsArray;
+    }
 
     try {
         const response = await apiFetch(req, url, 'POST', body);
@@ -81,6 +86,7 @@ router.post('/search', async (req, res) => {
         res.status(500).send('An error occurred while processing your search query.');
     }
 });
+
 
 
 

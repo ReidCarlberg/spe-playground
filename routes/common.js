@@ -28,9 +28,9 @@ async function apiFetch(req, url, method = 'GET', body = null) {
           throw new Error(`API call failed with status: ${response.status}, status text: ${response.statusText}, error: ${errorText}`);
       }
 
-      console.log('Response Status:', response.status);
+      //console.log('Response Status:', response.status);
 
-      console.log('Response Headers:', response.headers);
+      //console.log('Response Headers:', response.headers);
 
       //console.log('Response Body:', response.body);
 
