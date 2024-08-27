@@ -10,7 +10,7 @@ block content
 
       .form-group
         label(for="displayName") Display Name
-        input#name.form-control(type="text", name="displayName", required="required")
+        input#displayName.form-control(type="text", name="displayName", required="required")
 
       .form-group
         label(for="description") Description
@@ -35,23 +35,147 @@ block content
           option(value="true") Yes
 
       .form-group
-        label(for="allowMultipleLines") Allow Multiple Lines
-        select#allowMultipleLines.form-control(name="text[allowMultipleLines]")
+        label(for="columnType") Column Type
+        select#columnType.form-control(name="columnType")
+          option(value="text" selected) Text
+          option(value="boolean") Boolean
+          option(value="dateTime") DateTime
+          option(value="currency") Currency
+          option(value="choice") Choice
+          option(value="hyperlinkOrPicture") Hyperlink or Picture
+          option(value="number") Number
+          option(value="personOrGroup") Person or Group
+
+      // Fields specific to Text columns
+      .form-group.text-fields.d-none
+        label(for="textAllowMultipleLines") Allow Multiple Lines
+        select#textAllowMultipleLines.form-control(name="text[allowMultipleLines]")
           option(value="false" selected) No
           option(value="true") Yes
 
-      .form-group
-        label(for="appendChangesToExistingText") Append Changes to Existing Text
-        select#appendChangesToExistingText.form-control(name="text[appendChangesToExistingText]")
+      .form-group.text-fields.d-none
+        label(for="textAppendChangesToExistingText") Append Changes to Existing Text
+        select#textAppendChangesToExistingText.form-control(name="text[appendChangesToExistingText]")
           option(value="false" selected) No
           option(value="true") Yes
 
-      .form-group
-        label(for="linesForEditing") Lines for Editing
-        input#linesForEditing.form-control(type="number", name="text[linesForEditing]", value="0")
+      .form-group.text-fields.d-none
+        label(for="textLinesForEditing") Lines for Editing
+        input#textLinesForEditing.form-control(type="number", name="text[linesForEditing]", value="0")
 
-      .form-group
-        label(for="maxLength") Max Length
-        input#maxLength.form-control(type="number", name="text[maxLength]", value="255")
+      .form-group.text-fields.d-none
+        label(for="textMaxLength") Max Length
+        input#textMaxLength.form-control(type="number", name="text[maxLength]", value="255")
+
+      // Fields specific to Boolean columns
+      .form-group.boolean-fields.d-none
+
+      // Fields specific to DateTime columns
+      .form-group.dateTime-fields.d-none
+        label(for="dateTimeDisplayAs") DateTime Display As
+        select#dateTimeDisplayAs.form-control(name="dateTime[displayAs]")
+          option(value="default" selected) Default
+          option(value="friendly") Friendly
+          option(value="standard") Standard
+
+        label(for="dateTimeFormat") DateTime Format
+        select#dateTimeFormat.form-control(name="dateTime[format]")
+          option(value="dateOnly" selected) Date Only
+          option(value="dateTime") Date and Time
+
+      // Fields specific to Currency columns
+      .form-group.currency-fields.d-none
+        label(for="currencyLocale") Locale
+        input#currencyLocale.form-control(type="text", name="currency[locale]", value="en-us")
+
+      // Fields specific to Choice columns
+      .form-group.choice-fields.d-none
+        label(for="choiceAllowTextEntry") Allow Text Entry
+        select#choiceAllowTextEntry.form-control(name="choice[allowTextEntry]")
+          option(value="false" selected) No
+          option(value="true") Yes
+
+        label(for="choiceChoices") Choices
+        input#choiceChoices.form-control(type="text", name="choice[choices]", placeholder="Enter choices, comma-separated")
+
+        label(for="choiceDisplayAs") Choice Display As
+        select#choiceDisplayAs.form-control(name="choice[displayAs]")
+          //option(value="checkBoxes" selected) Check Boxes
+          option(value="dropDownMenu") Drop Down Menu
+          option(value="radioButtons") Radio Buttons
+
+      // Fields specific to Hyperlink or Picture columns
+      .form-group.hyperlinkOrPicture-fields.d-none
+        label(for="hyperlinkOrPictureIsPicture") Is Picture
+        select#hyperlinkOrPictureIsPicture.form-control(name="hyperlinkOrPicture[isPicture]")
+          option(value="false" selected) No
+          option(value="true") Yes
+
+      // Fields specific to Number columns
+      .form-group.number-fields.d-none
+        label(for="numberDecimalPlaces") Decimal Places
+        select#numberDecimalPlaces.form-control(name="number[decimalPlaces]")
+          option(value="automatic" selected) Automatic
+          option(value="none") None
+          option(value="one") One
+          option(value="two") Two
+          option(value="three") Three
+          option(value="four") Four
+          option(value="five") Five
+
+        label(for="numberDisplayAs") Number Display As
+        select#numberDisplayAs.form-control(name="number[displayAs]")
+          option(value="number" selected) Number
+          option(value="percentage") Percentage
+
+        label(for="numberMaximum") Maximum
+        input#numberMaximum.form-control(type="number", name="number[maximum]")
+
+        label(for="numberMinimum") Minimum
+        input#numberMinimum.form-control(type="number", name="number[minimum]")
+
+      // Fields specific to Person or Group columns
+      .form-group.personOrGroup-fields.d-none
+        label(for="personOrGroupAllowMultipleSelection") Allow Multiple Selection
+        select#personOrGroupAllowMultipleSelection.form-control(name="personOrGroup[allowMultipleSelection]")
+          option(value="false" selected) No
+          option(value="true") Yes
+
+        label(for="personOrGroupChooseFromType") Choose From Type
+        select#personOrGroupChooseFromType.form-control(name="personOrGroup[chooseFromType]")
+          option(value="peopleAndGroups" selected) People and Groups
+          option(value="peopleOnly") People Only
 
       button.btn.btn-success(type="submit") Submit New Metadata
+
+block scripts
+  script.
+    console.log('Script is being loaded.');
+
+    $(document).ready(function() {
+      console.log('Document is ready.');
+
+      function toggleFields(selectedType) {
+        console.log('Selected column type:', selectedType);
+        
+        // Hide all field-specific groups
+        $('.form-group.text-fields, .form-group.boolean-fields, .form-group.dateTime-fields, .form-group.currency-fields, .form-group.choice-fields, .form-group.hyperlinkOrPicture-fields, .form-group.number-fields, .form-group.personOrGroup-fields').addClass('d-none');
+        console.log('All fields hidden.');
+
+        // Show the selected type's fields
+        $('.form-group.' + selectedType + '-fields').removeClass('d-none');
+        console.log('Visible fields for type:', selectedType);
+      }
+
+      // Initial toggle based on the current selection
+      const initialType = $('#columnType').val();
+      console.log('Initial column type:', initialType);
+      toggleFields(initialType);
+
+      // Update fields on column type change
+      $('#columnType').change(function() {
+        const selectedType = $(this).val();
+        console.log('Column type changed to:', selectedType);
+        toggleFields(selectedType);
+      });
+    });

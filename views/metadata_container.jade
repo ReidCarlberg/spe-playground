@@ -11,11 +11,12 @@ block content
             th Name
             th Display Name
             th Description
+            th Type
             th Hidden
             th Indexed
             th Read Only
             th Required
-            th Max Length
+            th Additional Info
             th Id
         tbody
           each column in columns
@@ -23,13 +24,28 @@ block content
               td #{column.name}
               td #{column.displayName}
               td #{column.description || 'N/A'}
+              td #{column.type || 'N/A'}
               td #{column.hidden ? 'Yes' : 'No'}
               td #{column.indexed ? 'Yes' : 'No'}
               td #{column.readOnly ? 'Yes' : 'No'}
               td #{column.required ? 'Yes' : 'No'}
-              td 
-                if column.text 
-                    #{column.text.maxLength}
+              td
+                if column.text
+                  | Max Length: #{column.text.maxLength}
+                else if column.number
+                  | Decimal Places: #{column.number.decimalPlaces}, Min: #{column.number.minimum}, Max: #{column.number.maximum}
+                else if column.boolean
+                  | Boolean Field
+                else if column.dateTime
+                  | Format: #{column.dateTime.format}
+                else if column.currency
+                  | Locale: #{column.currency.locale}
+                else if column.personOrGroup
+                  | Multiple Selection: #{column.personOrGroup.allowMultipleSelection ? 'Yes' : 'No'}, Choose From: #{column.personOrGroup.chooseFromType}
+                else if column.choice
+                  | Choices: #{column.choice.choices.join(', ')}, Display As: #{column.choice.displayAs}
+                else
+                  | N/A
               td #{column.id}
     else
       p No columns found.

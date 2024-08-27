@@ -45,34 +45,85 @@ router.post('/submit_new_column', async (req, res) => {
     // Construct the POST URL using the containerId
     const url = `https://graph.microsoft.com/beta/storage/fileStorage/containers/${containerId}/columns`;
 
-    // Create the payload from the form data
+    // Base formData object
     const formData = {
         description: req.body.description,
-        enforceUniqueValues: 'false',
+        enforceUniqueValues: 'false', // Must be false
         hidden: req.body.hidden === 'true',
         indexed: req.body.indexed === 'true',
         name: req.body.name,
         displayName: req.body.displayName,
-        text: {
-            allowMultipleLines: req.body['text[allowMultipleLines]'] === 'true',
-            maxLength: parseInt(req.body['text[maxLength]'])
-        }
     };
+
+    // Handle column type-specific fields
+    switch (req.body.columnType) {
+        case 'text':
+            formData.text = {
+                allowMultipleLines: req.body['text[allowMultipleLines]'] === 'true',
+                appendChangesToExistingText: req.body['text[appendChangesToExistingText]'] === 'true',
+                linesForEditing: parseInt(req.body['text[linesForEditing]']),
+                maxLength: parseInt(req.body['text[maxLength]'])
+            };
+            break;
+        case 'boolean':
+            formData.boolean = {};
+            break;
+        case 'dateTime':
+            formData.dateTime = {
+                displayAs: req.body['dateTime[displayAs]'],
+                format: req.body['dateTime[format]']
+            };
+            break;
+        case 'currency':
+            formData.currency = {
+                locale: req.body['currency[locale]'] || 'en-us' // Default to 'en-us' if not provided
+            };
+            break;
+        case 'choice':
+            formData.choice = {
+                allowTextEntry: req.body['choice[allowTextEntry]'] === 'true',
+                choices: req.body['choice[choices]'].split(',').map(choice => choice.trim()),
+                displayAs: req.body['choice[displayAs]']
+            };
+            break;
+        case 'hyperlinkOrPicture':
+            formData.hyperlinkOrPicture = {
+                isPicture: req.body['hyperlinkOrPicture[isPicture]'] === 'true'
+            };
+            break;
+        case 'number':
+            formData.number = {
+                decimalPlaces: req.body['number[decimalPlaces]'],
+                displayAs: req.body['number[displayAs]'],
+                maximum: parseFloat(req.body['number[maximum]']),
+                minimum: parseFloat(req.body['number[minimum]'])
+            };
+            break;
+        case 'personOrGroup':
+            formData.personOrGroup = {
+                allowMultipleSelection: req.body['personOrGroup[allowMultipleSelection]'] === 'true',
+                chooseFromType: req.body['personOrGroup[chooseFromType]']
+            };
+            break;
+        default:
+            console.error('Unknown column type:', req.body.columnType);
+            res.render('error', { error: 'Unknown column type specified' });
+            return;
+    }
 
     try {
         // Use apiFetch to send the POST request
         const result = await apiFetch(req, url, 'POST', formData);
         
         req.session.message = "Column Added";
-        res.render('success', {orig_url: url, orig_body: formData, orig_results: result, continueUrl: '/metadata/list/'+containerId});
-        // Redirect or render a success message
-        // res.redirect('/metadata/list/' + containerId);  // Change this to where you want users to go after success
+        res.render('success', { orig_url: url, orig_body: formData, orig_results: result, continueUrl: '/metadata/list/' + containerId });
     } catch (error) {
         console.error('Failed to submit new metadata column:', error);
         // Handle errors by rendering or redirecting to an error page
         res.render('error', { error: error.message });
     }
 });
+
 
 router.get('/properties/:containerId', async (req, res) => {
     const containerId = req.params.containerId;
