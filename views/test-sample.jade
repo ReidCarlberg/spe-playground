@@ -8,3 +8,12 @@ block content
         label(for="searchQuery") Sample Get URL
         input#searchQuery.form-control(type="text" name="searchQuery" required=true)
       button.btn.btn-primary(type="submit") Search
+
+    p.h3 Fun things to try 
+
+    p Drive item search syntax 
+    pre https://graph.microsoft.com/v1.0/drives/[your drive id]/root/search(q='some term')
+    
+    p Limit the fields you get back
+    pre https://graph.microsoft.com/v1.0/drives/[your drive id]/root/search(q='some term')?$select=name,id,webUrl
+  
