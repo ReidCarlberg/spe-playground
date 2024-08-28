@@ -26,6 +26,8 @@
 
 ### Notes:
 
+- This app assumes you're running in global admin mode all the time.
+- If you authenticate in app-only authentication mode, lots of things won't work the way they do in delegated mode -- search, collab, etc.
 - There are sample docs in the aptly named "sample-docs" directory.
 - This isn't designed to show best practices etc., just shows different aspects in action.
 

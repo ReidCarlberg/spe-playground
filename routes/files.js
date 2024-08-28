@@ -392,7 +392,7 @@ router.post('/fields/update/:fileId', async (req, res) => {
 
     try {
         const response = await apiFetch(req, url, 'PATCH', body);
-        res.render('success', { message: 'Update successfull foe ' + fieldName, orig_url: url, orig_body: body, orig_results: response, continueUrl: '/files/fields/' + fileId});
+        res.render('success', { message: 'Update successfull for ' + fieldName, orig_url: url, orig_body: body, orig_results: response, continueUrl: '/files/fields/' + fileId});
         //res.redirect('/fields/edit/' + fileId + '?success=true'); // Redirect back to the form with a success message
     } catch (error) {
         console.error('Error updating fields:', error);
