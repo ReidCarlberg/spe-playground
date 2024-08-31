@@ -3,6 +3,14 @@ extends layout
 block content
   .container.mt-4
     h1 Files and Folders List 
+
+    p.mb-3
+      a(href=`/files/upload` class="btn btn-success") Upload
+      &nbsp;
+      a(href=`/files/upload-session` class="btn btn-success") Upload with Create Upload Session
+      &nbsp;
+      a(href=`/files/create-folder` class="btn btn-success") Create Folder
+      
     if items && items.length > 0
       table.table.table-bordered
         thead.thead-dark
@@ -53,12 +61,6 @@ block content
 
     else
       .alert.alert-info.mb-3 No items found.
-
-  p.mb-3
-    a(href=`/files/upload` class="btn btn-success") Upload
-
-  p.mb-3
-    a(href=`/files/upload-session` class="btn btn-success") Upload with Create Upload Session
 
   p.mb-3 
     a(href=`/files/create-new` class="btn btn-success") Create and edit new blank Word, Excel, or PowerPoint document.

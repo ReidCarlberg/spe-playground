@@ -18,6 +18,7 @@ router.get('/list/:containerId/:folderId?', async (req, res) => {
     try {
         const data = await apiFetch(req, url);
         req.session.driveId=containerId;
+        req.session.folderId=folderId;
         res.render('files_list', { items: data.value, orig_url: url, orig_results: data.value });
     } catch (error) {
         res.status(500).send('Error fetching files');
@@ -419,6 +420,62 @@ router.get('/fields/setreid/:fileId', async (req, res) => {
         res.status(500).send("Failed to create sharing link");
     }    
 
+});
+
+router.get('/create-folder', (req, res) => {
+    res.render('files_create_folder'); // Render the Jade template
+});
+
+router.post('/create-folder', async (req, res) => {
+    const { folderName } = req.body; // Get the folder name from the form
+    const driveId = req.session.driveId;
+    parentItemId = req.session.folderId;
+
+    if (!parentItemId) {
+        parentItemId = 'root'; // If no parent folder is specified, create the folder in the root
+    }
+    // Construct the API URL
+    const url = `https://graph.microsoft.com/v1.0/drives/${driveId}/items/${parentItemId}/children`;
+
+    console.log('Creating folder:', url);
+
+    // Construct the body of the POST request
+    const body = {
+        name: folderName,
+        folder: {},
+        "@microsoft.graph.conflictBehavior": "rename"
+    };
+
+    try {
+        // Make the POST request to the Microsoft Graph API
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${req.session.accessToken}` // Assuming the access token is stored in session
+            },
+            body: JSON.stringify(body)
+        });
+
+        const result = await response.json();
+
+        console.log('Create folder result:', result);
+
+        if (!response.ok) {
+            throw new Error(result.error.message || 'Error creating folder');
+        }
+
+        // Redirect to the success page
+        res.render('success', {
+            orig_url: url,
+            orig_body: body,
+            orig_results: result,
+            continueUrl: `/files/list/${driveId}`
+        });
+    } catch (error) {
+        console.error('Error creating folder:', error);
+        res.status(500).send('Failed to create folder');
+    }
 });
 
 module.exports = router;

@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  .container.mt-4
+    h1 Create New Folder
+    
+    form(action="/files/create-folder" method="post")
+      .form-group
+        label(for="folderName") Folder Name
+        input#folderName.form-control(type="text", name="folderName", required=true, placeholder="Enter folder name")
+      
+      button.btn.btn-primary(type="submit") Create Folder
