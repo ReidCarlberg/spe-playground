@@ -1,0 +1,58 @@
+extends layout
+
+block content
+  .container.mt-4
+    h1 Container Drive Properties
+    
+    if data
+      table.table.table-striped
+        tr
+          th Name
+          td #{data.name}
+        tr
+          th Description
+          td #{data.description}
+        tr
+          th Drive Type
+          td #{data.driveType}
+        tr
+          th ID
+          td #{data.id}
+        tr
+          th Web URL
+          td 
+            a(href=data.webUrl target="_blank") #{data.webUrl}
+        tr
+          th Created Date
+          td #{new Date(data.createdDateTime).toLocaleString()}
+        tr
+          th Last Modified Date
+          td #{new Date(data.lastModifiedDateTime).toLocaleString()}
+        tr
+          th Created By
+          td #{data.createdBy.user.displayName}
+        tr
+          th Last Modified By
+          td 
+            | #{data.lastModifiedBy.user.displayName} 
+            br 
+            | Email: #{data.lastModifiedBy.user.email}
+            br 
+            | ID: #{data.lastModifiedBy.user.id}
+        tr
+          th Quota State
+          td #{data.quota.state}
+        tr
+          th Quota Deleted
+          td #{data.quota.deleted} bytes
+        tr
+          th Quota Remaining
+          td #{data.quota.remaining} bytes
+        tr
+          th Quota Total
+          td #{data.quota.total} bytes
+        tr
+          th Quota Used
+          td #{data.quota.used} bytes
+    else
+      p No data available.

@@ -3,17 +3,6 @@ var router = express.Router();
 
 const apiFetch = require('./common');  
 
-function printObject(obj, indent = '') {
-  for (const [key, value] of Object.entries(obj)) {
-    if (typeof value === 'object' && value !== null) {
-      console.log(`${indent}${key}: `);
-      printObject(value, indent + '  '); // Recursive call with increased indentation
-    } else {
-      console.log(`${indent}${key}: ${value}`);
-    }
-  }
-}
-
 // List Containers
 router.get('/', async (req, res) => {
   //res.render('containers_home', { username: req.session.username });
@@ -26,6 +15,18 @@ router.get('/list', async (req, res) => {
   try {
     const userData = await apiFetch(req, url);
     res.render('containers_list', { containers: userData.value, orig_url: url, orig_results: userData.value });
+  } catch (error) {
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// List Containers
+router.get('/drive/:driveId', async (req, res) => {
+  const url = `https://graph.microsoft.com/v1.0/storage/fileStorage/containers/${req.params.driveId}/drive`;
+  try {
+    const results = await apiFetch(req, url);
+  res.render('containers_drive_info', { data: results, orig_url: url, orig_results: results });
+    //res.json(results)
   } catch (error) {
     res.status(500).send('Internal Server Error');
   }

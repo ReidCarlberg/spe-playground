@@ -23,6 +23,7 @@ block content
               td= container.storageUsedInBytes
               td= container.ownershipType
               td
+                a.btn.btn-info(href=`/containers/drive/${container.id}`) Drive Properties &nbsp;
                 a.btn.btn-info(href=`/containers/perms/${container.id}`) View Perms &nbsp;
                 a.btn.btn-info(href=`/containers/grant-container/${container.id}`) Grant Perms
                 a.btn.btn-info(href=`/metadata/list/${container.id}`) Metadata Columns
