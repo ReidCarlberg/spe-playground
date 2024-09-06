@@ -1,6 +1,6 @@
 # SPE-Playground
 
-## by @ReidCarlberg - https://www.linkedin.com/in/reidcarlberg/
+by @ReidCarlberg - https://www.linkedin.com/in/reidcarlberg/
 
 **Important: although I am a Microsoft employee, this is not officially produced or maintained and you should only use it at your own risk.**
 
