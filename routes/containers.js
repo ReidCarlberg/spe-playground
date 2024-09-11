@@ -126,6 +126,7 @@ router.get('/delete/:containerId', async (req, res) => {
       await apiFetch(req, url, 'DELETE');
       res.redirect('/containers/list');
   } catch (error) {
+      console.log(error);
       res.status(500).send('Error deleting container');
   }
 });
