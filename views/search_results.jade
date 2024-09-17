@@ -22,7 +22,8 @@ block content
                         a(href='/files/preview/' + hit.resource.parentReference.driveId + '/' + hit.resource.id)= hit.resource.name
                         p.list-group-item-text Summary: #{hit.summary}
                       else if searchType === 'Drive'
-                        a(href='/files/list/' + hit.resource.id )= hit.summary
+                        a(href='/files/list/' + hit.resource.id )= hit.resource.name 
+                        p.list-group-item-text Summary: #{hit.summary}
                     
             else
               p No hits found.

@@ -2,7 +2,7 @@ extends layout
 
 block content
   .container.mt-4
-    h1 Add New Property to Container
+    h1 Set Container Property
     form(action=`/metadata/property_add/${driveId}`, method="post")
       input(type="hidden", name="driveId", value=driveId)
 
@@ -21,3 +21,5 @@ block content
           option(value="false") False
 
       button.btn.btn-success(type="submit") Submit Property
+
+    p To set to a new value, simply use this page again with the same property name.
