@@ -51,7 +51,7 @@ async function apiFetch(req, url, method = 'GET', body = null) {
           });
       }
         */
-      if (response.headers.get('content-type').includes('application/pdf')) {
+      if (response.headers.get('content-type') && response.headers.get('content-type').includes('application/pdf')) {
         console.log('Response is a PDF');
         const arrayBuffer = await response.arrayBuffer(); // Get the response as an ArrayBuffer
         return Buffer.from(arrayBuffer); // Convert ArrayBuffer to Node.js Buffer
