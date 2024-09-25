@@ -478,4 +478,38 @@ router.post('/create-folder', async (req, res) => {
     }
 });
 
+router.get('/upload-multiple', (req, res) => {
+    res.render('files_upload_multiple', { title: 'Upload Multiple Files' });
+});
+
+router.post('/upload-multiple-files', upload.array('files'), async (req, res) => {
+    // Ensure files are present in the request
+    if (!req.files || req.files.length === 0) {
+        return res.status(400).send('No files were uploaded.');
+    }
+
+    let folderId = req.session.folderId && req.session.folderId.trim() !== "" ? req.session.folderId : 'root';
+
+    try {
+        // Loop through each file and upload them individually
+        const uploadPromises = req.files.map(async (file) => {
+            const url = `https://graph.microsoft.com/v1.0/drives/${req.session.driveId}/items/${folderId}:/${encodeURIComponent(file.originalname)}:/content`;
+            return await apiFetch(req, url, 'PUT', file.buffer);
+        });
+
+        // Wait for all file uploads to complete
+        const results = await Promise.all(uploadPromises);
+
+        res.render('success', { 
+            message: 'Files uploaded successfully', 
+            continueUrl: `/files/list/${req.session.driveId}/${folderId !== 'root' ? folderId : ''}`,
+            orig_results: results 
+        });
+    } catch (error) {
+        console.error('Error uploading files:', error);
+        res.status(500).send('Error uploading files');
+    }
+});
+
+
 module.exports = router;

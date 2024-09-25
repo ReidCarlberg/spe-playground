@@ -10,7 +10,9 @@ block content
       a(href=`/files/upload-session` class="btn btn-success") Upload with Create Upload Session
       &nbsp;
       a(href=`/files/create-folder` class="btn btn-success") Create Folder
-      
+      &nbsp;
+      a(href=`/files/upload-multiple` class="btn btn-success") Upload Multiple Files
+
     if items && items.length > 0
       table.table.table-bordered
         thead.thead-dark
@@ -58,12 +60,8 @@ block content
                 | &nbsp;
                 a(href='/files/delete/' + item.id onclick="return confirm('Are you sure?');" class="btn btn-danger") Delete
 
-
     else
       .alert.alert-info.mb-3 No items found.
 
   p.mb-3 
     a(href=`/files/create-new` class="btn btn-success") Create and edit new blank Word, Excel, or PowerPoint document.
-
-
-

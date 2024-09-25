@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  .container.mt-4
+    h1.mb-4 Multiple File Upload
+    form(action="/files/upload-multiple-files", method="post", enctype="multipart/form-data")
+      .form-group
+        label(for="files") Choose files to upload
+        input.form-control(type="file", name="files", id="files", multiple)
+      button.btn.btn-primary(type="submit") Upload Files
+
+    p.h3 Notes
+    p You can select and upload multiple files at once.
