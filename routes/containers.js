@@ -39,7 +39,7 @@ router.get('/create', (req, res) => {
 router.post('/create', async (req, res) => {
   const { displayName, description } = req.body;
   const containerTypeId = process.env.CONTAINER_TYPE_ID;
-  const url = 'https://graph.microsoft.com/beta/storage/fileStorage/containers';
+  const url = 'https://graph.microsoft.com/v1.0/storage/fileStorage/containers';
   const bodyData = { displayName, description, containerTypeId };
 
   try {

@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  .container.mt-4
+    h1 Version History
+    h4 #{containerId}
+
+    // Navigation Button
+    a.btn.btn-primary(href="/files/list/" + containerId) List Files
+
+    // Table to Display Data
+    table.table.table-hover
+      thead
+        tr
+          th Version ID
+          th Last Modified Date
+          th Last Modified By
+          th Actions
+      tbody
+        each version in data.value
+          tr
+            td #{version.id}
+            td #{new Date(version.lastModifiedDateTime).toLocaleString()}
+            td #{version.lastModifiedBy.user.displayName} (#{version.lastModifiedBy.user.email})
+            td
+              a.btn.btn-secondary(href=version["@microsoft.graph.downloadUrl"], target="_blank") Download
+              a.btn.btn-info(href="/files/preview/" + driveId + "/" + containerId + "/" + version.id, target="_blank") Preview
+
+    // Navigation Button
+    a.btn.btn-primary(href="/containers/list") List Containers

@@ -35,11 +35,20 @@ router.get('/', (req, res) => {
   }
 });
 
+// Home route
+router.get('/special', (req, res) => {
+  if (req.session.isAuthenticated) {
+    res.redirect('/containers/');
+  } else {
+    res.render('index-special', { title: 'SPE Playground' } );
+  }
+});
+
 // Route to start the auth flow
 router.get('/signin', (req, res) => {
   const authCodeUrlParameters = {
     //scopes: ["user.read", "user.read.all", "Files.Read.All", "Files.ReadWrite.All", "Sites.Read.All", "Sites.ReadWrite.All", "FileStorageContainer.Selected"],
-    scopes: ["user.read", "FileStorageContainer.Selected", "User.RevokeSessions.All", "Files.Read.All"],
+    scopes: ["user.read", "FileStorageContainer.Selected", "User.RevokeSessions.All", "Files.Read.All", "Sites.Read.All", "ExternalItem.Read.All"],
     redirectUri: process.env.REDIRECT_URI,
     prompt: "consent"
   };

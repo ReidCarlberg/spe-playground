@@ -173,9 +173,14 @@ router.get('/versions/:itemId', async (req, res) => {
 
     try {
         const data = await apiFetch(req, url);
-        res.json(data);
+        res.render('file_versions_list', {
+            containerId: req.params.itemId,
+            data: data,
+            driveId: req.session.driveId,
+            orig_url: url, orig_results: data
+        });
     } catch (error) {
-        res.status(500).send('Failed to retrieve preview URL');
+        res.status(500).send('Failed to retrieve version data');
     }
 });
 
@@ -209,6 +214,27 @@ router.get('/preview/:driveId/:itemId', async (req, res) => {
         res.status(500).send('Failed to retrieve preview URL');
     }
 });
+
+/*
+This isn't actually a function that works, but a halluciantion
+
+router.get('/preview/:driveId/:itemId/:versionId', async (req, res) => {
+    const url = `https://graph.microsoft.com/v1.0/drives/${req.params.driveId}/items/${req.params.itemId}/versions/${req.params.versionId}/preview`;
+
+    try {
+        const data = await apiFetch(req, url, 'POST');
+        if (data.getUrl) {
+            // Redirect to the preview URL with the `&nb=true` query parameter to open in a new tab.
+            res.redirect(data.getUrl + "&nb=true");
+        } else {
+            res.status(404).send('Preview URL not found in the response.');
+        }
+    } catch (error) {
+        res.status(500).send('Failed to retrieve preview URL');
+    }
+});
+*/
+
 
 router.get('/edit/:itemId', async (req, res) => {
     const url = `https://graph.microsoft.com/v1.0/drives/${req.session.driveId}/items/${req.params.itemId}/createLink`;

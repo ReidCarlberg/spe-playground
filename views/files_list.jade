@@ -5,63 +5,52 @@ block content
     h1 Files and Folders List 
 
     p.mb-3
-      a(href=`/files/upload` class="btn btn-success") Upload
-      &nbsp;
-      a(href=`/files/upload-session` class="btn btn-success") Upload with Create Upload Session
-      &nbsp;
-      a(href=`/files/create-folder` class="btn btn-success") Create Folder
-      &nbsp;
-      a(href=`/files/upload-multiple` class="btn btn-success") Upload Multiple Files
+      a(href='/files/upload' class="btn btn-success mb-2") Upload
+      a(href='/files/upload-session' class="btn btn-success mb-2") Upload with Create Upload Session
+      a(href='/files/create-folder' class="btn btn-success mb-2") Create Folder
+      a(href='/files/upload-multiple' class="btn btn-success mb-2") Upload Multiple Files
 
     if items && items.length > 0
-      table.table.table-bordered
-        thead.thead-dark
-          tr
-            th Name
-            th Type
-            th Created By
-            th Created Date Time
-            th Actions 
-        tbody
-          each item in items
-            tr
-              td
-                if item['@microsoft.graph.downloadUrl']
-                  a(href=item['@microsoft.graph.downloadUrl'])= item.name
-                else if item.folder
-                  a(href='/files/list/' + item.parentReference.driveId + '/' + item.id)= item.name
-                else
-                  | #{item.name}
-              td= item['@microsoft.graph.downloadUrl'] ? 'File' : 'Folder'
-              td= item.createdBy.user.displayName
-              td= item.createdDateTime
-              td
-                - var isOfficeFormat = /\.(docx|xlsx|pptx)$/.test(item.name);
-                if isOfficeFormat
-                  a(href=`/files/edit/${item.id}`, target="_blank" class="btn btn-primary") Edit
-                else if item['@microsoft.graph.downloadUrl']
-                  a(href=`/files/preview/${item.id}`, target="_blank" class="btn btn-primary") Download
-                | &nbsp;
-                a(href=`/files/preview/${item.id}`, target="_blank" class="btn btn-primary") Preview
-                | &nbsp;
-                a(href=`/files/versions/${item.id}`, target="_blank" class="btn btn-primary") Versions 
-                | &nbsp;
-                a(href=`/files/pdf/${item.id}`, target="_blank" class="btn btn-primary") PDF ME 
-                | &nbsp;
-                a(href=`${item.webUrl}` target="_blank" class="btn btn-info") Open
-                | &nbsp;
-                a(href=`/files/perms/${item.id}` class="btn btn-info") Perms
-                | &nbsp;
-                a(href=`/files/grant-invite/${item.id}` class="btn btn-info") Invite
-                | &nbsp;
-                a(href=`/files/create-link/${item.id}` class="btn btn-info") Link
-                | &nbsp;
-                a(href=`/files/fields/${item.id}` class="btn btn-info") Fields
-                | &nbsp;
-                a(href='/files/delete/' + item.id onclick="return confirm('Are you sure?');" class="btn btn-danger") Delete
+      // Adjust grid to be one card per row on all screen sizes
+      .row
+        each item in items
+          .col-12.mb-4
+            .card.shadow-sm
+              .card-body
+                h5.card-title
+                  if item['@microsoft.graph.downloadUrl']
+                    a(href=item['@microsoft.graph.downloadUrl'])= item.name
+                  else if item.folder
+                    a(href='/files/list/' + item.parentReference.driveId + '/' + item.id)= item.name
+                  else
+                    | #{item.name}
+                p.card-text
+                  strong Type: 
+                  | #{item['@microsoft.graph.downloadUrl'] ? 'File' : 'Folder'}
+                  br
+                  strong Created By: 
+                  | #{item.createdBy.user.displayName}
+                  br
+                  strong Created Date: 
+                  | #{item.createdDateTime}
+
+                // Button group with spacing
+                .d-flex.flex-wrap.mt-3
+                  - var isOfficeFormat = /\.(docx|xlsx|pptx)$/.test(item.name);
+                  if isOfficeFormat
+                    a.btn.btn-primary.btn-sm.mb-1.me-1(href='/files/edit/' + item.id, target="_blank") Edit
+                  a.btn.btn-primary.btn-sm.mb-1.me-1(href='/files/preview/' + item.id, target="_blank") Preview
+                  a.btn.btn-primary.btn-sm.mb-1.me-1(href='/files/versions/' + item.id, target="_blank") Versions
+                  a.btn.btn-primary.btn-sm.mb-1.me-1(href='/files/pdf/' + item.id, target="_blank") PDF ME
+                  a.btn.btn-info.btn-sm.mb-1.me-1(href=item.webUrl target="_blank") Open
+                  a.btn.btn-info.btn-sm.mb-1.me-1(href='/files/perms/' + item.id) Perms
+                  a.btn.btn-info.btn-sm.mb-1.me-1(href='/files/grant-invite/' + item.id) Invite
+                  a.btn.btn-info.btn-sm.mb-1.me-1(href='/files/create-link/' + item.id) Link
+                  a.btn.btn-info.btn-sm.mb-1.me-1(href='/files/fields/' + item.id) Fields
+                  a.btn.btn-danger.btn-sm.mb-1.me-1(href='/files/delete/' + item.id onclick="return confirm('Are you sure?');") Delete
 
     else
       .alert.alert-info.mb-3 No items found.
 
   p.mb-3 
-    a(href=`/files/create-new` class="btn btn-success") Create and edit new blank Word, Excel, or PowerPoint document.
+    a(href='/files/create-new' class="btn btn-success mb-3") Create and edit new blank Word, Excel, or PowerPoint document.
