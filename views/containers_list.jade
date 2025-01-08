@@ -5,10 +5,10 @@ block content
     h1.mb-4 Containers
 
     if containers.length
-      // Card-based layout for better mobile responsiveness
+      // Card-based layout with minimal margins for mobile devices
       .row
         each container in containers
-          .col-12.mb-4
+          .col-12.p-2
             .card.shadow-sm
               .card-body
                 h5.card-title
@@ -26,8 +26,8 @@ block content
                   strong Ownership Type: 
                   | #{container.ownershipType}
 
-                // Button group for actions, styled for mobile
-                .d-flex.flex-wrap.mt-3
+                // Button group with spacing adjustments for mobile
+                .d-flex.flex-wrap.mt-2
                   a.btn.btn-info.btn-sm.mb-1.me-1(href=`/containers/drive/${container.id}`) Drive Properties
                   a.btn.btn-info.btn-sm.mb-1.me-1(href=`/containers/perms/${container.id}`) View Perms
                   a.btn.btn-info.btn-sm.mb-1.me-1(href=`/containers/grant-container/${container.id}`) Grant Perms

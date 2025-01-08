@@ -11,10 +11,10 @@ block content
       a(href='/files/upload-multiple' class="btn btn-success mb-2") Upload Multiple Files
 
     if items && items.length > 0
-      // Adjust grid to be one card per row on all screen sizes
+      // Card-based layout with minimal margins for mobile devices
       .row
         each item in items
-          .col-12.mb-4
+          .col-12.p-2
             .card.shadow-sm
               .card-body
                 h5.card-title
@@ -34,8 +34,8 @@ block content
                   strong Created Date: 
                   | #{item.createdDateTime}
 
-                // Button group with spacing
-                .d-flex.flex-wrap.mt-3
+                // Button group with reduced spacing for mobile screens
+                .d-flex.flex-wrap.mt-2
                   - var isOfficeFormat = /\.(docx|xlsx|pptx)$/.test(item.name);
                   if isOfficeFormat
                     a.btn.btn-primary.btn-sm.mb-1.me-1(href='/files/edit/' + item.id, target="_blank") Edit

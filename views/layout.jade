@@ -4,6 +4,18 @@ html
     title= title
     link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
+
+    // Inline CSS for mobile responsiveness
+    style.
+      @media (max-width: 768px) {
+          .container {
+              padding: 0.5rem;
+          }
+          .card {
+              margin: 0;
+          }
+      }
+
   body
     if username
       nav.navbar.navbar-expand-lg.navbar-light.bg-light
@@ -32,7 +44,7 @@ html
 
     .container.mt-4
       block content
-    
+
     // Details section with toggle button
     if orig_url || orig_body || orig_results
       button#toggleButton.btn.btn-success.fixed-bottom(type='button', data-toggle='collapse', data-target='#detailsSection', aria-expanded='false', aria-controls='detailsSection') Show API Details
