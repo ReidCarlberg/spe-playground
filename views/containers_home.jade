@@ -1,18 +1,13 @@
-extends layout 
+extends layout
 
-block content 
-  .container.mt-4
-    h1.mb-4 Containers
-    p 
+block content
+    h1.h3.text-center.mb-4 Containers
+
+    p.text-center
         a(href='/containers/list') Container List
-          &nbsp;&ndash; only for global admins and doesnt work for standard users.
-    p Container Search - Available to standard users with correct oauth perms. 
+        |  &nbsp;&ndash; only for global admins and doesn't work for standard users.
 
-    p.mb-3
-      a(href=`/containers/registerContainerType` class="btn btn-primary") Register Container Type (everything will fail until you do this)
+    p.text-center.mb-2 Container Search - Available to standard users with correct OAuth permissions.
 
-    p.mb-3
-      a(href=`/containers/create` class="btn btn-primary") Create Container
-      
-    p
-      a(href='/files/list/b!K5F58af6_0-N0Zw7krCohkuGBOJGX99FsI5my3MKOBiKBLIE-urbS4k3xAFAFCqi') List files in main container
+    p.text-center.mb-3
+      a(href='/containers/create' class="btn btn-primary") Create Container

@@ -1,17 +1,15 @@
 extends layout
 
 block content
-  .container.mt-4
-    h1.mb-4 Containers
+    h1.h3.text-center.mb-4 Containers
 
     if containers.length
-      // Card-based layout with minimal margins for mobile devices
-      .row
+      .row.g-2
         each container in containers
-          .col-12.p-2
-            .card.shadow-sm
-              .card-body
-                h5.card-title
+          .col-12
+            .card.shadow-sm.border-0.p-2
+              .card-body.p-3
+                h5.card-title.mb-3
                   a(href=`/files/list/${container.id}`)= container.displayName
                 p.card-text
                   strong Container Type ID: 
@@ -26,18 +24,17 @@ block content
                   strong Ownership Type: 
                   | #{container.ownershipType}
 
-                // Button group with spacing adjustments for mobile
-                .d-flex.flex-wrap.mt-2
-                  a.btn.btn-info.btn-sm.mb-1.me-1(href=`/containers/drive/${container.id}`) Drive Properties
-                  a.btn.btn-info.btn-sm.mb-1.me-1(href=`/containers/perms/${container.id}`) View Perms
-                  a.btn.btn-info.btn-sm.mb-1.me-1(href=`/containers/grant-container/${container.id}`) Grant Perms
-                  a.btn.btn-info.btn-sm.mb-1.me-1(href=`/metadata/list/${container.id}`) Metadata Columns
-                  a.btn.btn-info.btn-sm.mb-1.me-1(href=`/metadata/property_add/${container.id}`) Set Property
-                  a.btn.btn-info.btn-sm.mb-1.me-1(href=`/metadata/properties/${container.id}`) List Properties
-                  a(href='/containers/delete/' + container.id onclick="return confirm('Are you sure?');" class="btn btn-danger btn-sm mb-1 me-1") Delete
+                .d-grid.gap-2.mt-3
+                  a.btn.btn-info.w-100(href=`/containers/drive/${container.id}`) Drive Properties
+                  a.btn.btn-info.w-100(href=`/containers/perms/${container.id}`) View Perms
+                  a.btn.btn-info.w-100(href=`/containers/grant-container/${container.id}`) Grant Perms
+                  a.btn.btn-info.w-100(href=`/metadata/list/${container.id}`) Metadata Columns
+                  a.btn.btn-info.w-100(href=`/metadata/property_add/${container.id}`) Set Property
+                  a.btn.btn-info.w-100(href=`/metadata/properties/${container.id}`) List Properties
+                  a.btn.btn-danger.w-100(href='/containers/delete/' + container.id onclick="return confirm('Are you sure?');") Delete
 
     else
       .alert.alert-info.mb-3 No containers found.
 
-    p.mb-3
+    p.text-center.mb-3
       a(href=`/containers/create` class="btn btn-primary") Create Container

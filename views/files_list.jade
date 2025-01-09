@@ -1,17 +1,15 @@
 extends layout
 
 block content
-  .container.mt-4
-    h1 Files and Folders List 
+    h1.h3.text-center.mt-4 Files and Folders List 
 
-    p.mb-3
+    p.text-center.mb-3
       a(href='/files/upload' class="btn btn-success mb-2") Upload
       a(href='/files/upload-session' class="btn btn-success mb-2") Upload with Create Upload Session
       a(href='/files/create-folder' class="btn btn-success mb-2") Create Folder
       a(href='/files/upload-multiple' class="btn btn-success mb-2") Upload Multiple Files
 
     if items && items.length > 0
-      // Card-based layout with minimal margins for mobile devices
       .row
         each item in items
           .col-12.p-2
@@ -34,7 +32,6 @@ block content
                   strong Created Date: 
                   | #{item.createdDateTime}
 
-                // Button group with reduced spacing for mobile screens
                 .d-flex.flex-wrap.mt-2
                   - var isOfficeFormat = /\.(docx|xlsx|pptx)$/.test(item.name);
                   if isOfficeFormat
@@ -52,5 +49,5 @@ block content
     else
       .alert.alert-info.mb-3 No items found.
 
-  p.mb-3 
-    a(href='/files/create-new' class="btn btn-success mb-3") Create and edit new blank Word, Excel, or PowerPoint document.
+    p.text-center.mb-3 
+      a(href='/files/create-new' class="btn btn-success mb-3") Create and edit new blank Word, Excel, or PowerPoint document.

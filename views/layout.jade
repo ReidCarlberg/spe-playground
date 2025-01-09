@@ -2,36 +2,50 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css')
+    link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
 
-    // Inline CSS for mobile responsiveness
+    // Viewport for responsive design
+    meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+
+    // Inline CSS for further fine-tuning mobile layout
     style.
+      body {
+          font-size: 1.2rem; /* Increase default font size for better readability */
+      }
       @media (max-width: 768px) {
+          body {
+              font-size: 1rem; /* Adjust font size for mobile devices */
+          }
           .container {
-              padding: 0.5rem;
+              padding: 1rem;
           }
           .card {
-              margin: 0;
+              padding: 1rem;
+              border-radius: 8px;
+          }
+          .btn {
+              margin-bottom: 4px;
           }
       }
 
   body
     if username
       nav.navbar.navbar-expand-lg.navbar-light.bg-light
-        a.navbar-brand(href='/') SPE Playground
-        button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
-          span.navbar-toggler-icon
-        .collapse.navbar-collapse#navbarNav
-          ul.navbar-nav
-            li.nav-item
-              a.nav-link(href='/containers/') Containers
-            li.nav-item
-              a.nav-link(href='/search/') Search
-            li.nav-item 
-              a.nav-link(href='/test-sample') Test An API Call 
-            li.nav-item
-              a.nav-link(href='/signout/') Sign Out (#{username})
+          a.navbar-brand(href='/') SPE Playground
+          button.navbar-toggler(type='button', data-bs-toggle='collapse', data-bs-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
+              span.navbar-toggler-icon
+          .collapse.navbar-collapse#navbarNav
+              ul.navbar-nav
+                  li.nav-item
+                      a.nav-link(href='/containers/') Containers
+                  li.nav-item
+                      a.nav-link(href='/search/') Search
+                  li.nav-item 
+                      a.nav-link(href='/test-sample') Test An API Call 
+                  li.nav-item
+                      a.nav-link(href='/signout/') Sign Out (#{username})
+
     else
       p Visit 
         a(href='https://aka.ms/start-spe') aka.ms/start-spe 
@@ -65,19 +79,27 @@ html
     else
       button.btn.btn-secondary.disabled.fixed-bottom(type='button') No Details Available
 
-    script(src='https://code.jquery.com/jquery-3.5.1.min.js')
-    script(src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js')
-    script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js')
-    
+    // Bootstrap 5 JS Bundle (no jQuery required)
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js')
+
     // Include page-specific scripts here
     block scripts
 
+    // Bootstrap 5 Native Toggle Button Fix
     script.
-      $(document).ready(function() {
-        $('#detailsSection').on('show.bs.collapse', function () {
-          $('html, body').animate({ scrollTop: 0 }, 'fast');
-          $('#toggleButton').text('Hide API Details');
-        }).on('hide.bs.collapse', function () {
-          $('#toggleButton').text('Show API Details');
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleButton = document.getElementById('toggleButton');
+            const detailsSection = document.getElementById('detailsSection');
+
+            toggleButton.addEventListener('click', function () {
+                const isVisible = detailsSection.classList.contains('show');
+                const bsCollapse = new bootstrap.Collapse(detailsSection);
+                if (isVisible) {
+                    bsCollapse.hide();
+                    toggleButton.textContent = 'Show API Details';
+                } else {
+                    bsCollapse.show();
+                    toggleButton.textContent = 'Hide API Details';
+                }
+            });
         });
-      });

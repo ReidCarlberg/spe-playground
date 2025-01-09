@@ -1,11 +1,8 @@
 extends layout
 
 block content
-  .container.mt-4
-    p.h1 SharePoint Embedded Playground
+    h1.h3.text-center.mt-4 SharePoint Embedded Playground
 
-    p
-      a(href=`/signin` class="btn btn-success") Sign In (Delegated)
-
-
-
+    // Center the button without a nested container
+    .d-flex.justify-content-center.mt-4
+      a(href='/signin' class="btn btn-success btn-lg w-100") Sign In (Delegated)
