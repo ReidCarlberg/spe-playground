@@ -38,7 +38,7 @@ router.get('/', (req, res) => {
 // Home route
 router.get('/special', (req, res) => {
   if (req.session.isAuthenticated) {
-    res.redirect('/containers/');
+    res.render('index-special', { title: 'SPE Playground' } );
   } else {
     res.render('index-special', { title: 'SPE Playground' } );
   }
