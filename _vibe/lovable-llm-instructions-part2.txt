@@ -1,0 +1,116 @@
+-----------------------------------------------
+7. MANAGING CONTAINER PERMISSIONS
+-----------------------------------------------
+
+You can view and grant permissions to a container using the Microsoft Graph API.
+
+VIEW PERMISSIONS
+----------------
+Method: GET  
+URL format:
+https://graph.microsoft.com/beta/storage/fileStorage/containers/<driveId>/permissions
+
+- Returns a list of all permission objects on the specified container
+- Render this using a page like `container_perms`
+
+User Interface Expectations:
+- Use a table layout to display each permission entry
+- Show these fields:
+  - Display Name
+  - Email Address
+  - User Principal Name (for users) or "Group" (for groups)
+  - Roles (comma-separated)
+  - Permission ID
+- If no permissions exist, show a friendly message like: “No permissions found.”
+
+GRANT PERMISSIONS
+-----------------
+Method: POST  
+URL: https://graph.microsoft.com/v1.0/storage/fileStorage/containers/<driveId>/permissions  
+Body JSON:
+{
+  "roles": ["<role>"],
+  "grantedToV2": {
+    "user": {
+      "userPrincipalName": "<email>"
+    }
+  }
+}
+
+Required Fields:
+- driveId (container ID)
+- email (userPrincipalName)
+- role (one of: reader, writer, manager, owner)
+
+User Interface Expectations:
+- Use a form with these fields:
+  - Drive ID (prefilled if coming from a detail view)
+  - Email address (required)
+  - Role dropdown (options: Reader, Writer, Manager, Owner)
+- Submit button labeled “Submit”
+- Display an error if any required field is missing
+- On success, show a confirmation message and link to return to container list
+
+Notes:
+- This feature is intended for demo/administrative purposes only
+- Permissions can be granted only to users (not programmatic client apps)
+- Do not expose permission management to non-admin end users
+
+-----------------------------------------------
+8. SEARCH
+-----------------------------------------------
+
+The app supports full-text and metadata search across SharePoint Embedded containers and files using Microsoft Graph's search API.
+
+SEARCH REQUEST
+--------------
+Method: POST  
+URL: https://graph.microsoft.com/v1.0/search/query
+
+Body structure:
+{
+  "requests": [
+    {
+      "entityTypes": ["drive", "driveItem"],
+      "query": {
+        "queryString": "your-query"
+      },
+      "sharePointOneDriveOptions": {
+        "includeHiddenContent": true
+      },
+      "fields": ["optional,list,of,fields"]
+    }
+  ]
+}
+
+Supported entityTypes:
+- drive
+- driveItem
+- drive + driveItem
+
+Search Modes:
+- Term (default): automatically appends AND ContainerTypeId:<id>
+- Exact: performs exact query using user input
+
+If the user includes a "fields" input, it must be a comma-separated list of Graph fields.
+
+USER INTERFACE – INPUT
+----------------------
+- A form should allow the user to select:
+  - Search Type: Drive, DriveItem, or both
+  - Search Mode: term (auto-append) or exact
+  - Search Query (text input)
+  - Optional Fields (comma-separated)
+
+- Beneath the form, include guidance:
+  - Explain metadata query formats with suffixes (e.g., OWSTEXT)
+  - Show wildcard and prefix search examples
+  - Clarify behavior of the optional fields input
+
+USER INTERFACE – RESULTS
+------------------------
+- Show the search type and each search term
+- For DriveItem results, link to preview: /files/preview/<driveId>/<itemId>
+- For Drive results, link to: /files/list/<driveId>
+- Show summaries under each result
+- Show “No results found” if empty

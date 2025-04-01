@@ -1,0 +1,156 @@
+SHAREPOINT EMBEDDED (SPE) DEMO APP INSTRUCTIONS
+===============================================
+
+Dear Lovable, please create a beautiful demo app for SharePoint Embedded based on the following instructions.
+
+This guide provides standardized steps for building a SharePoint Embedded (SPE) demo app using the Microsoft Graph API.
+
+-----------------------------------------------
+0. Notes on user experience
+-----------------------------------------------
+
+- very clean and simple is the goal
+- use modern typefaces and layouts
+- the landing page should proclaim SharePoint Embedded in big bold letters with a simple modal Sign In with Microsoft prompt.
+
+-----------------------------------------------
+1. REQUIRED CONFIGURATION
+-----------------------------------------------
+
+Every SPE app must define these three non-secret values:
+
+CLIENT_ID=[uuid]  
+TENANT_ID=[uuid]  
+CONTAINER_TYPE_ID=[uuid]  
+
+You can safely include these values in your source code.
+
+-----------------------------------------------
+2. AUTHENTICATION (MSAL)
+-----------------------------------------------
+
+Use Microsoft Authentication Library (MSAL) to authenticate users.
+
+- React apps: use the latest version of @azure/msal-react@latest (and definitely not some crazy old version like 2.0.11 when the latest is 3.0.7)
+— remember to call and await the MSAL `initialize()` function before using the instance.
+
+Required scopes:
+
+- user.read  
+- FileStorageContainer.Selected  
+- User.RevokeSessions.All  
+- Files.Read.All  
+- Sites.Read.All  
+- ExternalItem.Read.All  
+
+Access Tokens:
+- Must be sent with every Graph API request
+- Header format: Authorization: Bearer <accessToken>
+
+Login behavior:
+- Do not auto-login
+- Wait for user to click a login button before starting the flow
+
+-----------------------------------------------
+3. CONTAINERS
+-----------------------------------------------
+
+CREATE CONTAINER
+----------------
+Method: POST  
+URL: https://graph.microsoft.com/v1.0/storage/fileStorage/containers  
+Body JSON:
+{
+  "displayName": "Name of container",
+  "description": "Optional description",
+  "containerTypeId": "<value of CONTAINER_TYPE_ID>"
+}
+
+LIST CONTAINERS
+---------------
+Method: GET  
+URL format:
+https://graph.microsoft.com/v1.0/storage/fileStorage/containers
+  ?$select=id,displayName,description,containerTypeId,createdDateTime
+  &$filter=containerTypeId eq <value of CONTAINER_TYPE_ID>
+
+Important:
+- Do NOT add quotes around the containerTypeId
+- Do NOT include extra fields in the $select parameter
+- Clicking on the name of a container should open that container and list the files and folders inside.
+
+-----------------------------------------------
+4. FILES
+-----------------------------------------------
+
+UPLOAD FILE TO CONTAINER
+------------------------
+Method: PUT  
+URL format:
+https://graph.microsoft.com/v1.0/drives/<driveId>/items/<folderId>:/<fileName>:/content
+
+- A file must be uploaded into a particular driveId. 
+- If no folderId is provided, use 'root'
+- Each file should be uploaded in its own PUT request with raw file content as the body
+- File upload should support selecting and uploading multiple files
+
+LIST FILES IN A CONTAINER
+--------------------------
+Method: GET  
+URL format:
+https://graph.microsoft.com/v1.0/drives/<containerId>/items/<folderId>/children
+  ?$expand=listItem($expand=fields)
+
+- some results will be folders
+- If no folderId is specified, use 'root'
+- if there is a folder, use it's name where it says "folderId" and remember what folder you are on.
+- when display folders or files, use clean iconography to indicate the file type and what actions are available
+- when in doubt, clicking on the name of folder should open that folder and list the contents.  
+- clicking on the name of a file should either open that file for editing or open for preview, depending on the file type.
+
+-----------------------------------------------
+5. OPENING & PREVIEWING FILES
+-----------------------------------------------
+
+OFFICE DOCUMENTS
+----------------
+- Use the webUrl property to open the document in Office Online
+- Redirect the browser to the webUrl
+- Office documents are editable; the user experience should reflect that with labels like “Edit”
+
+NON-OFFICE DOCUMENTS (PDF, JPEG, etc.)
+--------------------------------------
+Step 1: Fetch preview URL
+
+Method: POST  
+URL format:
+https://graph.microsoft.com/v1.0/drives/<driveId>/items/<itemId>/preview
+
+- Response includes a getUrl field
+- Redirect to: getUrl + "&nb=true"
+
+Step 2: Render in iframe or allow user to open in new tab
+
+Important:
+- Do NOT use webUrl for non-Office formats
+- Use only the preview URL
+- Non-Office documents are preview-only; the UX should label this action as “Preview”
+- On-screen preview should include a link to open the document in a new tab
+
+
+-----------------------------------------------
+6. GENERAL NOTES
+-----------------------------------------------
+
+- Use any HTTP library or tool (Fetch, axios, etc.)
+- Generally speaking you should use the latest versions of any imported libraries or modules.
+- Always include the Authorization header with Bearer token
+- Show success and error messages clearly
+- Keep the UI simple and user-friendly
+- Do not include Microsoft or other logos in the demo
+- Include a Help section that explains the purpose and use of each page (non-technical, human-readable)
+- Add a “Get Started with SharePoint Embedded” link in the footer of every page:
+  https://aka.ms/start-spe 
+- If using lucide-react icons, avoid or replace unsupported ones like FilePdf or FileUpload to prevent runtime errors
+
+END OF INSTRUCTIONS
