@@ -1,0 +1,156 @@
+SHAREPOINT EMBEDDED (SPE) - FILE & CONTAINER DELETION INSTRUCTIONS
+=====================================================================
+
+This guide provides instructions for safely deleting files (DriveItems) and containers from a SharePoint Embedded environment using the Microsoft Graph API.
+
+-----------------------------------------------
+1. DELETE A FILE (DRIVEITEM)
+-----------------------------------------------
+
+To delete a file from a container:
+
+Method: DELETE  
+URL Format:  
+https://graph.microsoft.com/v1.0/drives/<driveId>/items/<itemId>
+
+Where:
+- <driveId> is the ID of the container
+- <itemId> is the ID of the file (DriveItem) to delete
+
+Example ExpressJS route:
+router.get('/delete/:itemId', async (req, res) => {
+    const url = `https://graph.microsoft.com/v1.0/drives/${req.session.driveId}/items/${req.params.itemId}`;
+
+    try {
+        await apiFetch(req, url, 'DELETE');
+        res.redirect('/files/list/' + req.session.driveId);
+    } catch (error) {
+        res.status(500).send('Error deleting file');
+    }
+});
+
+-----------------------------------------------
+2. DELETE A CONTAINER
+-----------------------------------------------
+
+To delete a container:
+
+Method: DELETE  
+URL Format:  
+https://graph.microsoft.com/beta/storage/fileStorage/containers/<containerId>
+
+Where:
+- <containerId> is the ID of the container to delete
+
+Example ExpressJS route:
+router.get('/delete/:containerId', async (req, res) => {
+  const url = `https://graph.microsoft.com/beta/storage/fileStorage/containers/${req.params.containerId}`;
+
+  try {
+      await apiFetch(req, url, 'DELETE');
+      res.redirect('/containers/list');
+  } catch (error) {
+      console.log(error);
+      res.status(500).send('Error deleting container');
+  }
+});
+
+-----------------------------------------------
+3. MANAGE PERMISSIONS ON A FILE (DRIVEITEM)
+-----------------------------------------------
+
+You can view and grant permissions on an individual file using the Microsoft Graph API.
+
+VIEW FILE PERMISSIONS
+---------------------
+Method: GET  
+URL Format:
+https://graph.microsoft.com/v1.0/drives/<driveId>/items/<fileId>/permissions
+
+Example ExpressJS route:
+router.get('/perms/:fileId', async (req, res) => {
+    const { fileId } = req.params;
+    const url = `https://graph.microsoft.com/v1.0/drives/${req.session.driveId}/items/${fileId}/permissions`;
+
+    try {
+        const permissions = await apiFetch(req, url);
+        res.json({ permissions: permissions });
+    } catch (error) {
+        console.error('Error fetching permissions:', error);
+        res.status(500).send('Error fetching permissions');
+    }
+});
+
+GRANT FILE PERMISSIONS (INVITE)
+-------------------------------
+Method: POST  
+URL: https://graph.microsoft.com/v1.0/drives/<driveId>/items/<fileId>/invite
+
+Request Body:
+{
+  "requireSignIn": true,
+  "sendInvitation": false,
+  "roles": ["write"],
+  "recipients": [{ "email": "user@example.com" }],
+  "message": null
+}
+
+Example ExpressJS route:
+router.post('/grant-invite', async (req, res) => {
+    const { fileId, driveId, email } = req.body;
+    const url = `https://graph.microsoft.com/v1.0/drives/${driveId}/items/${fileId}/invite`;
+
+    const body = {
+        "requireSignIn": true,
+        "sendInvitation": false,
+        "roles": ["write"],
+        "recipients": [{ "email": email }],
+        "message": null
+    };
+
+    try {
+        const response = await apiFetch(req, url, 'POST', body);
+        res.json({ success: true, link: response.link, message: "Sharing link created successfully." });
+    } catch (error) {
+        console.error('Error creating sharing link:', error);
+        res.status(500).send("Failed to create sharing link");
+    }
+});
+
+USER EXPERIENCE REQUIREMENTS
+----------------------------
+
+FILE PERMISSIONS UI
+--------------------
+- Display a list of existing permissions in a table format for each file.
+- Each row should show:
+  - Display Name
+  - Email
+  - User Principal Name (UPN)
+  - Roles (e.g. read, write)
+  - Permission ID
+- If no permissions exist, show a message like "No permissions found."
+
+GRANT FILE PERMISSION UI
+-------------------------
+- Use a form with the following fields:
+  - Drive ID (hidden or prefilled)
+  - File ID (hidden or passed via route param)
+  - Email address (input field, required)
+- Limit roles to "write" for simplicity
+- Include a "Grant Access" button
+  - Validate all inputs before submission
+  - Show a confirmation dialog before submitting the form
+  - On success, display a message and show the returned sharing link (if any)
+  - On error, display a user-friendly error message
+
+DELETION REQUIREMENTS
+----------------------
+- Always show a confirmation dialog before initiating a deletion.
+- The confirmation should clearly state the name of the file or container and warn that the action is irreversible.
+- Include a cancel option to return to the previous screen.
+- Upon successful deletion, redirect the user back to the appropriate list (files or containers).
+- On error, show a user-friendly error message.
+- For permissions, provide a readable list and simple form for granting access by email.
+
+END OF INSTRUCTIONS

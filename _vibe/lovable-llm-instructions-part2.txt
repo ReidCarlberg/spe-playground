@@ -52,7 +52,6 @@ User Interface Expectations:
 - On success, show a confirmation message and link to return to container list
 
 Notes:
-- This feature is intended for demo/administrative purposes only
 - Permissions can be granted only to users (not programmatic client apps)
 - Do not expose permission management to non-admin end users
 
@@ -85,7 +84,7 @@ Body structure:
 
 Supported entityTypes:
 - drive
-- driveItem
+- driveItem (default)
 - drive + driveItem
 
 Search Modes:
@@ -97,7 +96,7 @@ If the user includes a "fields" input, it must be a comma-separated list of Grap
 USER INTERFACE – INPUT
 ----------------------
 - A form should allow the user to select:
-  - Search Type: Drive, DriveItem, or both
+  - Search Type: Drive, DriveItem (default), or both
   - Search Mode: term (auto-append) or exact
   - Search Query (text input)
   - Optional Fields (comma-separated)
