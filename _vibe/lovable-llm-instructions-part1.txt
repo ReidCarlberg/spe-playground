@@ -11,7 +11,13 @@ This guide provides standardized steps for building a SharePoint Embedded (SPE) 
 
 - very clean and simple is the goal
 - use modern typefaces and layouts
-- the landing page should proclaim SharePoint Embedded in big bold letters with a simple modal Sign In with Microsoft prompt.
+- you will need a login page, a post login landing page, a file upload page, a search page.  Note that file upload and search can be modal dialogs instead of separate pages.
+- the landing page should proclaim "SharePoint Embedded Demo" Use a bold, geometric sans-serif font similar to Helvetica or Circular with large size, tight letter-spacing, with a simple Sign In with Microsoft prompt.  
+- There should be a subhead that says you must configure CLIENT_ID, TENANT_ID, and CONTAINER_TYPE_ID before this will work.
+- the logged in template should have a standard header and footer.
+- the header should display "SharePoint Embedded Demo", a link to search, a link specific to the user, and a logout button.
+- logout should take the user back to a login page.
+- the post login landing page should display all of the containers a user has access to.
 
 -----------------------------------------------
 1. REQUIRED CONFIGURATION
@@ -33,15 +39,7 @@ Use Microsoft Authentication Library (MSAL) to authenticate users.
 
 - React apps: use the latest version of @azure/msal-react@latest (and definitely not some crazy old version like 2.0.11 when the latest is 3.0.7)
 — remember to call and await the MSAL `initialize()` function before using the instance.
-
-Required scopes:
-
-- user.read  
-- FileStorageContainer.Selected  
-- User.RevokeSessions.All  
-- Files.Read.All  
-- Sites.Read.All  
-- ExternalItem.Read.All  
+- do not specify scopes as part of login.  Scopes should be empty.
 
 Access Tokens:
 - Must be sent with every Graph API request
@@ -50,6 +48,9 @@ Access Tokens:
 Login behavior:
 - Do not auto-login
 - Wait for user to click a login button before starting the flow
+
+Logout behavior:
+- Be sure to clear any empty storage on logout to prevent data leakage.
 
 -----------------------------------------------
 3. CONTAINERS

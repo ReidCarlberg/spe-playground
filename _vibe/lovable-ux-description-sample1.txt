@@ -1,0 +1,49 @@
+Technical UI Description
+Design System
+Framework: React with Shadcn/UI component library
+Styling: Tailwind CSS
+Color Palette: Neutral grayscale with Microsoft-inspired blue accents
+Typography: Modern sans-serif (Inter font)
+UI Characteristics
+Responsive Layout
+
+Flexbox and grid-based design
+Mobile-friendly breakpoints
+Dynamic content scaling
+Color Scheme
+
+Primary Colors:
+Background: Soft white/light gray (#F5F5F7)
+Foreground: Dark gray/near-black (#333333)
+Accent: Microsoft Blue (#0078D4)
+Semantic Colors:
+Success: Green variations
+Error: Red variations
+Warning: Yellow/Orange variations
+Component Design
+
+Shadcn/UI components with rounded corners
+Soft drop shadows for depth
+Subtle hover and interactive states
+Consistent padding and spacing
+Typography
+
+Font: Inter
+Hierarchical text styles
+Responsive font sizes
+High contrast for readability
+Interaction Patterns
+
+Modal dialogs with smooth animations
+Tooltips for additional context
+Keyboard navigation support
+Accessible design principles
+Technical Implementation Details
+State Management: React Context
+Routing: React Router
+Data Fetching: Tanstack React Query
+Icons: Lucide React
+Form Handling: React Hook Form
+Validation: Zod
+Toast Notifications: Sonner
+Would you like me to generate a sample component that matches this technical description?
