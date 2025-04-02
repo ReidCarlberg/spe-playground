@@ -2,10 +2,12 @@
 8. SEARCH
 -----------------------------------------------
 
+-When you are done with this section, this search functionality should be visible in the header for every authenticated user.
 -If the app currently has search functionality, remove it first, replace it with this.
 -The app supports full-text and metadata search across SharePoint Embedded containers and files using Microsoft Graph's search API.
 -Add a search icon to the header and display the search as a modal dialog when someone clicks it.
 -Search results are generally an iteratable collection, but may also be a single non-iteratable item
+
 SEARCH REQUEST
 --------------
 Method: POST  
