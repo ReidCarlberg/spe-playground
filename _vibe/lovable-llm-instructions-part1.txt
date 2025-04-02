@@ -10,12 +10,14 @@ This guide provides standardized steps for building a SharePoint Embedded (SPE) 
 -----------------------------------------------
 
 - very clean and simple is the goal
+- you have leeway to add an adventurous cool factor of your own choosing
 - use modern typefaces and layouts
 - you will need a login page, a post login landing page, a file upload page, a search page.  Note that file upload and search can be modal dialogs instead of separate pages.
-- the landing page should proclaim "SharePoint Embedded Demo" Use a bold, geometric sans-serif font similar to Helvetica or Circular with large size, tight letter-spacing, with a simple Sign In with Microsoft prompt.  
+- the landing page should proclaim "SharePoint Embedded Demo" just one time.  
+- Use a bold, geometric sans-serif font similar to Helvetica or Circular with large size, tight letter-spacing, with a simple Sign In with Microsoft prompt.  
 - There should be a subhead that says you must configure CLIENT_ID, TENANT_ID, and CONTAINER_TYPE_ID before this will work.
 - the logged in template should have a standard header and footer.
-- the header should display "SharePoint Embedded Demo", a link to search, a link specific to the user, and a logout button.
+- the header should display "SharePoint Embedded Demo", a link specific to the user, and a logout button.
 - logout should take the user back to a login page.
 - the post login landing page should display all of the containers a user has access to.
 
@@ -50,7 +52,7 @@ Login behavior:
 - Wait for user to click a login button before starting the flow
 
 Logout behavior:
-- Be sure to clear any empty storage on logout to prevent data leakage.
+- Be sure to clear any local storage on logout to prevent data leakage.
 
 -----------------------------------------------
 3. CONTAINERS
@@ -91,9 +93,10 @@ URL format:
 https://graph.microsoft.com/v1.0/drives/<driveId>/items/<folderId>:/<fileName>:/content
 
 - A file must be uploaded into a particular driveId. 
-- If no folderId is provided, use 'root'
+- If no folderId is provided, use 'root:' instead of '<folderId>:'
 - Each file should be uploaded in its own PUT request with raw file content as the body
 - File upload should support selecting and uploading multiple files
+- There should be a progress meter that helps the user understand progress
 
 LIST FILES IN A CONTAINER
 --------------------------
@@ -103,7 +106,7 @@ https://graph.microsoft.com/v1.0/drives/<containerId>/items/<folderId>/children
   ?$expand=listItem($expand=fields)
 
 - some results will be folders
-- If no folderId is specified, use 'root'
+- If no folderId is specified, use 'root:'
 - if there is a folder, use it's name where it says "folderId" and remember what folder you are on.
 - when display folders or files, use clean iconography to indicate the file type and what actions are available
 - when in doubt, clicking on the name of folder should open that folder and list the contents.  

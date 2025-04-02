@@ -1,0 +1,12 @@
+-------------------------------------------
+Introducing Dev Mode
+-------------------------------------------
+
+Many users of this demo app are developers.  They want to see the detail of API calls.  
+
+Create a way to track
+a) API Calls, the full text
+b) API Results, the full text
+
+This should not be on the screen all the time, but should instead be an option the user can click in the header when they want to see it.
+

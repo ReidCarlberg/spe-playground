@@ -1,0 +1,60 @@
+-----------------------------------------------
+8. SEARCH
+-----------------------------------------------
+
+-If the app currently has search functionality, remove it first, replace it with this.
+-The app supports full-text and metadata search across SharePoint Embedded containers and files using Microsoft Graph's search API.
+-Add a search icon to the header and display the search as a modal dialog when someone clicks it.
+-Search results are generally an iteratable collection, but may also be a single non-iteratable item
+SEARCH REQUEST
+--------------
+Method: POST  
+URL: https://graph.microsoft.com/v1.0/search/query
+
+Body structure:
+{
+  "requests": [
+    {
+      "entityTypes": ["drive", "driveItem"],
+      "query": {
+        "queryString": "your-query"
+      },
+      "sharePointOneDriveOptions": {
+        "includeHiddenContent": true
+      },
+      "fields": ["optional,list,of,fields"]
+    }
+  ]
+}
+
+Supported entityTypes:
+- drive
+- driveItem (default)
+- drive + driveItem
+
+Search Modes:
+- Term (default): automatically appends AND ContainerTypeId:<id>
+- Exact: performs exact query using user input
+
+If the user includes a "fields" input, it must be a comma-separated list of Graph fields.
+
+USER INTERFACE – INPUT
+----------------------
+- A form should allow the user to select:
+  - Search Type: Drive, DriveItem (default), or both
+  - Search Mode: term (auto-append) or exact
+  - Search Query (text input)
+  - Optional Fields (comma-separated)
+
+- Beneath the form, include guidance:
+  - Explain metadata query formats with suffixes (e.g., OWSTEXT)
+  - Show wildcard and prefix search examples
+  - Clarify behavior of the optional fields input
+
+USER INTERFACE – RESULTS
+------------------------
+- Show the search type and each search term
+- For DriveItem results, link to preview: /files/preview/<driveId>/<itemId>
+- For Drive results, link to: /files/list/<driveId>
+- Show summaries under each result
+- Show “No results found” if empty
