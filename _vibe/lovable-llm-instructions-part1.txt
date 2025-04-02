@@ -3,21 +3,14 @@ SHAREPOINT EMBEDDED (SPE) DEMO APP INSTRUCTIONS
 
 Dear Lovable, please create a beautiful demo app for SharePoint Embedded based on the following instructions.
 
-This guide provides standardized steps for building a SharePoint Embedded (SPE) demo app using the Microsoft Graph API.
-
 -----------------------------------------------
 0. Notes on user experience
 -----------------------------------------------
 
 - the app name should include "spe-demo" 
 - very clean and simple is the goal
-- you have leeway to add an adventurous cool factor of your own choosing (Tarantino, Dragon Ball, NewsRadio)
-- use modern typefaces and layouts
 - you will need a login page, a post login landing page, a file upload page, a search page.  Note that file upload and search can be modal dialogs instead of separate pages.
-- the landing page should proclaim "SharePoint Embedded Demo" just one time.  
-- Use a bold, geometric sans-serif font similar to Helvetica or Circular with large size, tight letter-spacing, with a simple Sign In with Microsoft prompt.  
 - There should be a subhead that says you must configure CLIENT_ID, TENANT_ID, and CONTAINER_TYPE_ID before this will work.
-- the logged in template should have a standard header and footer.
 - the header should display "SharePoint Embedded Demo", a link specific to the user, and a logout button.
 - logout should take the user back to a login page.
 - the post login landing page should display all of the containers a user has access to.
@@ -43,10 +36,11 @@ You should keep these in a central configuration file so they are easy to update
 
 Use Microsoft Authentication Library (MSAL) to authenticate users.
 
-- React apps: use the latest version of @azure/msal-react@latest (do not use anything in the 2.x branch)
+- use the latest version of @azure/msal-react@latest (do not use anything in the 2.x branch)
 - do not specify scopes as part of login.  Scopes should be empty.
 - you sometimes have trouble with your msal related files. you should handle those installs robustly.
 - if a user is not authenticated, they should only be able to see the login screen.
+- once a user is authenticated, they should advance to the list of containers.
 
 Access Tokens:
 - Must be sent with every Graph API request
@@ -159,11 +153,8 @@ Important:
 - Use any HTTP library or tool (Fetch, axios, etc.)
 - Generally speaking you should use the latest versions of any imported libraries or modules.
 - Always include the Authorization header with Bearer token
-- Show success and error messages clearly
 - Do not include Microsoft or other logos in the demo
-- Include a Help section that explains the purpose and use of each page (non-technical, human-readable)
 - Add a “Get Started with SharePoint Embedded” link in the footer of every page:
   https://aka.ms/start-spe 
-- If using lucide-react icons, avoid or replace unsupported ones like FilePdf or FileUpload to prevent runtime errors
 
 END OF INSTRUCTIONS
