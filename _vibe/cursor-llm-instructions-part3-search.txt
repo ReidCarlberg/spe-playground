@@ -1,0 +1,186 @@
+-----------------------------------------------
+8. SEARCH
+-----------------------------------------------
+
+-When you are done with this section, this search functionality should be visible in the header for every authenticated user.
+-If the app currently has search functionality, remove it first, replace it with this.
+-The app supports full-text and metadata search across SharePoint Embedded containers and files using Microsoft Graph's search API.
+-Add a search icon to the header and display the search as a modal dialog when someone clicks it.
+-Search results are generally an iteratable collection, but may also be a single non-iteratable item
+
+SEARCH REQUEST
+--------------
+Method: POST  
+URL: https://graph.microsoft.com/v1.0/search/query
+
+Body structure:
+{
+  "requests": [
+    {
+      "entityTypes": ["drive", "driveItem"],
+      "query": {
+        "queryString": "your-query"
+      },
+      "sharePointOneDriveOptions": {
+        "includeHiddenContent": true
+      },
+      "fields": ["optional,list,of,fields"]
+    }
+  ]
+}
+
+Supported entityTypes:
+- drive
+- driveItem (default)
+- drive + driveItem
+
+Search Modes:
+- Term (default): automatically appends AND ContainerTypeId:<id>
+- Exact: performs exact query using user input
+
+If the user includes a "fields" input, it must be a comma-separated list of Graph fields.
+
+USER INTERFACE – INPUT
+----------------------
+- A form should allow the user to select:
+  - Search Type: Drive, DriveItem (default), or both
+  - Search Mode: term (auto-append) or exact
+  - Search Query (text input)
+  - Optional Fields (comma-separated)
+
+- Beneath the form, include guidance:
+  - Explain metadata query formats with suffixes (e.g., OWSTEXT)
+  - Show wildcard and prefix search examples
+  - Clarify behavior of the optional fields input
+
+USER INTERFACE – RESULTS
+------------------------
+- Show the search type and each search term
+- For DriveItem results, link to preview: /files/preview/<driveId>/<itemId>
+- For Drive results, link to: /files/list/<driveId>
+- Show summaries under each result
+- Show “No results found” if empty
+
+Here's an example of code to handle it (from a jade template)
+
+each hit in hitsContainer.hits
+    .list-group-item
+    h5.list-group-item-heading 
+        if searchType === 'DriveItem'
+        a(href='/files/preview/' + hit.resource.parentReference.driveId + '/' + hit.resource.id)= hit.resource.name
+        p.list-group-item-text Summary: #{hit.summary}
+        else if searchType === 'Drive'
+        a(href='/files/list/' + hit.resource.id )= hit.resource.name 
+        p.list-group-item-text Summary: #{hit.summary}
+
+
+Raw API Result examples
+
+Search response: {
+  "value": [
+    {
+      "searchTerms": [
+        "london"
+      ],
+      "hitsContainers": [
+        {
+          "hits": [
+            {
+              "hitId": "014YWEOHEUYEGKJRTBKZDL6QQ5FTZANPHO",
+              "rank": 1,
+              "summary": "<ddd/><c0>London</c0>-based startup that aims to build the world’s largest database of natural <ddd/>",
+              "resource": {
+                "@odata.type": "#microsoft.graph.driveItem",
+                "size": 2114402,
+                "fileSystemInfo": {
+                  "createdDateTime": "2025-04-02T15:59:51Z",
+                  "lastModifiedDateTime": "2024-06-27T18:39:40Z"
+                },
+                "listItem": {
+                  "@odata.type": "#microsoft.graph.listItem",
+                  "id": "a40cc194-61c6-4656-bf42-1d2cf206bcee",
+                  "fields": {}
+                },
+                "id": "014YWEOHEUYEGKJRTBKZDL6QQ5FTZANPHO",
+                "createdBy": {
+                  "user": {
+                    "displayName": "Reid Carlberg",
+                    "email": "reidcarlberg@greenwoodeccentrics.onmicrosoft.com"
+                  }
+                },
+                "createdDateTime": "2025-04-02T15:59:51Z",
+                "lastModifiedBy": {
+                  "user": {
+                    "displayName": "Reid Carlberg",
+                    "email": "reidcarlberg@greenwoodeccentrics.onmicrosoft.com"
+                  }
+                },
+                "lastModifiedDateTime": "2024-06-27T18:39:40Z",
+                "name": "microsoft-blog-2024-06-27.pdf",
+                "parentReference": {
+                  "driveId": "b!LzhT4eq5Rk6RA8sYDU3wmIR1qq7c44lJic8rFKQ7h9uo1H8pHgj3RpPPoCUkDSVp",
+                  "id": "014YWEOHBJWN3YTT2FIRAYNLRNO65Q56XP",
+                  "sharepointIds": {
+                    "listId": "297fd4a8-081e-46f7-93cf-a025240d2569",
+                    "listItemId": "33",
+                    "listItemUniqueId": "a40cc194-61c6-4656-bf42-1d2cf206bcee"
+                  },
+                  "siteId": "greenwoodeccentrics.sharepoint.com,e153382f-b9ea-4e46-9103-cb180d4df098,aeaa7584-e3dc-4989-89cf-2b14a43b87db"
+                },
+                "webUrl": "https://greenwoodeccentrics.sharepoint.com/contentstorage/CSP_e153382f-b9ea-4e46-9103-cb180d4df098/Document Library/microsoft-blog-2024-06-27.pdf"
+              }
+            },
+            {
+              "hitId": "01TIELBJHCTIZCAUMUQ5FLBKFF4W2XYHHG",
+              "rank": 2,
+              "summary": "<ddd/><c0>London</c0>-based startup that aims to build the world’s largest database of natural <ddd/>",
+              "resource": {
+                "@odata.type": "#microsoft.graph.driveItem",
+                "size": 2114402,
+                "fileSystemInfo": {
+                  "createdDateTime": "2025-04-04T21:33:19Z",
+                  "lastModifiedDateTime": "2024-06-27T18:39:40Z"
+                },
+                "listItem": {
+                  "@odata.type": "#microsoft.graph.listItem",
+                  "id": "20329ae2-9451-4a87-b0a8-a5e5b57c1ce6",
+                  "fields": {}
+                },
+                "id": "01TIELBJHCTIZCAUMUQ5FLBKFF4W2XYHHG",
+                "createdBy": {
+                  "user": {
+                    "displayName": "Reid Carlberg",
+                    "email": "reidcarlberg@greenwoodeccentrics.onmicrosoft.com"
+                  }
+                },
+                "createdDateTime": "2025-04-04T21:33:19Z",
+                "lastModifiedBy": {
+                  "user": {
+                    "displayName": "Reid Carlberg",
+                    "email": "reidcarlberg@greenwoodeccentrics.onmicrosoft.com"
+                  }
+                },
+                "lastModifiedDateTime": "2024-06-27T18:39:40Z",
+                "name": "microsoft-blog-2024-06-27.pdf",
+                "parentReference": {
+                  "driveId": "b!mrw8eDdgyEiRAQ8Ypx-TioR1qq7c44lJic8rFKQ7h9uo1H8pHgj3RpPPoCUkDSVp",
+                  "id": "01TIELBJBJWN3YTT2FIRAYNLRNO65Q56XP",
+                  "sharepointIds": {
+                    "listId": "297fd4a8-081e-46f7-93cf-a025240d2569",
+                    "listItemId": "23",
+                    "listItemUniqueId": "20329ae2-9451-4a87-b0a8-a5e5b57c1ce6"
+                  },
+                  "siteId": "greenwoodeccentrics.sharepoint.com,783cbc9a-6037-48c8-9101-0f18a71f938a,aeaa7584-e3dc-4989-89cf-2b14a43b87db"
+                },
+                "webUrl": "https://greenwoodeccentrics.sharepoint.com/contentstorage/CSP_783cbc9a-6037-48c8-9101-0f18a71f938a/Document Library/microsoft-blog-2024-06-27.pdf"
+              }
+            }
+          ],
+          "total": 2,
+          "moreResultsAvailable": false
+        }
+      ]
+    }
+  ],
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#Collection(microsoft.graph.searchResponse)"
+}

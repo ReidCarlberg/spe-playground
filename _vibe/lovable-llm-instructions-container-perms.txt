@@ -8,7 +8,7 @@ VIEW PERMISSIONS
 ----------------
 Method: GET  
 URL format:
-https://graph.microsoft.com/beta/storage/fileStorage/containers/<driveId>/permissions
+https://graph.microsoft.com/v1.0/storage/fileStorage/containers/<driveId>/permissions
 
 - Returns a list of all permission objects on the specified container
 - Render this using a page like `container_perms`

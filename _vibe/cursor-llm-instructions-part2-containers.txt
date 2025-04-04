@@ -1,0 +1,106 @@
+You are an expert at building apps.
+These instructions are a continuation of the previous ones.
+Remember that any time you make an API call, you need to include an authorization bearer token.
+
+-----------------------------------------------
+3. CONTAINERS
+-----------------------------------------------
+
+CREATE CONTAINER
+----------------
+Method: POST  
+URL: https://graph.microsoft.com/v1.0/storage/fileStorage/containers  
+Body JSON:
+{
+  "displayName": "Name of container",
+  "description": "Optional description",
+  "containerTypeId": "<value of CONTAINER_TYPE_ID>"
+}
+
+LIST CONTAINERS
+---------------
+Method: GET  
+URL format:
+https://graph.microsoft.com/v1.0/storage/fileStorage/containers
+  ?$select=id,displayName,description,containerTypeId,createdDateTime
+  &$filter=containerTypeId eq <value of CONTAINER_TYPE_ID>
+
+Important:
+- Do NOT add quotes around the containerTypeId
+- Do NOT include extra fields in the $select parameter
+- Clicking on the name of a container should open that container and list the files and folders inside.
+
+-----------------------------------------------
+4. FILES
+-----------------------------------------------
+
+UPLOAD FILE TO CONTAINER
+------------------------
+Method: PUT  
+URL format:
+https://graph.microsoft.com/v1.0/drives/<driveId>/items/<folderId>:/<fileName>:/content
+
+- A file must be uploaded into a particular driveId. 
+- If no folderId is provided, use 'root:' instead of '<folderId>:'
+- File upload should support selecting and uploading multiple files
+- Each file should be uploaded in its own PUT request with raw file content as the body
+- There should be a progress meter that fits within the UX
+- File upload user experience should expand to handle 30 files gracefully
+
+LIST FILES IN A CONTAINER
+--------------------------
+Method: GET  
+URL format:
+https://graph.microsoft.com/v1.0/drives/<containerId>/items/<folderId>/children
+  ?$expand=listItem($expand=fields)
+
+- listing of files must include the container name as part of a browsing path (eg "home > container name")
+- a list of files should generally be a line by line list and not a card style interface.
+- some results will be folders
+- If no folderId is specified, use 'root:'
+- if there is a folder, use it's name where it says "folderId" and remember what folder you are on.  the user should be able to click on a folder and see what's in the folder.
+- when the user is browsing a folder, there should be a path indicator that shows where the user is (eg "home > container name > folder")
+- when display folders or files, use clean iconography to indicate the file type and what actions are available
+- when in doubt, clicking on the name of folder should open that folder and list the contents.  
+- clicking on the name of a file should either open that file for editing or open for preview, depending on the file type.
+
+-----------------------------------------------
+5. OPENING & PREVIEWING FILES
+-----------------------------------------------
+
+OFFICE DOCUMENTS
+----------------
+- Use the webUrl property to open the document in Office Online
+- Redirect the browser to the webUrl
+- Office documents are editable; the user experience should reflect that with labels like “Edit”
+
+NON-OFFICE DOCUMENTS (PDF, JPEG, etc.)
+--------------------------------------
+Step 1: Fetch preview URL
+
+Method: POST  
+URL format:
+https://graph.microsoft.com/v1.0/drives/<driveId>/items/<itemId>/preview
+
+- Response includes a getUrl field
+- Redirect to: getUrl + "&nb=true"
+
+Step 2: Render in iframe or allow user to open in new tab
+
+Important:
+- Do NOT use webUrl for non-Office formats
+- Use only the preview URL
+- Non-Office documents are preview-only; the UX should label this action as “Preview”
+- On-screen preview should include a link to open the document in a new tab
+
+
+-----------------------------------------------
+6. GENERAL NOTES
+-----------------------------------------------
+
+- Use any HTTP library or tool (Fetch, axios, etc.)
+- Generally speaking you should use the latest versions of any imported libraries or modules.
+- Always include the Authorization header with Bearer token
+- Do not include Microsoft or other logos in the demo
+- Add a “Get Started with SharePoint Embedded” link in the footer of every page:
+  https://aka.ms/start-spe 
