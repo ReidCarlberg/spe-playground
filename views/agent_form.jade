@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1 Copilot Retrieval Query
+  form(method="POST", action="/agent/query")
+    .form-group
+      label(for="containerId") Select a Container
+      select#containerId.form-control(name="containerId", required)
+        option(value="") -- Select a Container --
+        each container in containers
+          option(value=container.id)= container.displayName
+    .form-group
+      label(for="queryString") Query String
+      input#queryString.form-control(type="text", name="queryString", placeholder="Enter your query", required)
+    .form-group
+      label(for="maxResults") Maximum Results
+      input#maxResults.form-control(type="number", name="maxResults", min="1", max="50", value="10", required)
+    button.btn.btn-primary(type="submit") Execute Query

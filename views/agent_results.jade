@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  h1 Query Results
+  if results
+    pre= results
+  else
+    p No results found.
+  a.btn.btn-secondary(href='/agent') Back to Query Form

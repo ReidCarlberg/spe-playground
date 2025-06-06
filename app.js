@@ -12,6 +12,7 @@ var containerRouter = require('./routes/containers');
 var filesRouter = require('./routes/files');
 var searchRouter = require('./routes/search');
 var metadataRouter = require('./routes/metadata');
+var agentRouter = require('./routes/agent');
 
 var app = express();
 
@@ -49,7 +50,8 @@ app.use('/containers', authenticate, containerRouter);
 app.use('/files', authenticate, filesRouter);
 app.use('/search', authenticate, searchRouter);
 app.use('/metadata', authenticate, metadataRouter);
+app.use('/agent', authenticate, agentRouter);
 
-app.listen(3000);
+//app.listen(3000);
 
 module.exports = app;

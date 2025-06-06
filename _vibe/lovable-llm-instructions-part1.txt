@@ -11,7 +11,7 @@ Instead of showing a list of containers or creating a container, you are listing
 
 - the app name should include "spe-demo" 
 - very clean and simple is the goal
-- you will need a login page, a post login landing page, a file upload page.  Note that file upload can be modal dialogs instead of separate pages.
+- you will need a login page, a post login landing page, a file upload page.  Note that file upload can be a modal dialog instead of separate pages.
 - There should be a subhead that says you must configure CLIENT_ID, TENANT_ID, and CONTAINER_TYPE_ID before this will work.
 - the header should display "SharePoint Embedded Demo", a link specific to the user, and a logout button.
 - logout should take the user back to a login page.
@@ -100,6 +100,7 @@ https://graph.microsoft.com/v1.0/drives/<driveId>/items/<folderId>:/<fileName>:/
 - Each file should be uploaded in its own PUT request with raw file content as the body
 - There should be a progress meter that fits within the UX
 - File upload user experience should expand to handle 30 files gracefully
+- When file upload is complete, the UX should return to a list of the files in the container and refresh the contents
 
 LIST FILES IN A CONTAINER
 --------------------------
@@ -125,10 +126,10 @@ https://graph.microsoft.com/v1.0/drives/<containerId>/items/<folderId>/children
 OFFICE DOCUMENTS
 ----------------
 - Use the webUrl property to open the document in Office Online
-- Redirect the browser to the webUrl
+- Redirect the browser to the webUrl in a new tab
 - Office documents are editable; the user experience should reflect that with labels like “Edit”
 
-NON-OFFICE DOCUMENTS (PDF, JPEG, etc.)
+NON-OFFICE DOCUMENTS (PDF, JPEG, Images, Video, etc.)
 --------------------------------------
 Step 1: Fetch preview URL
 
